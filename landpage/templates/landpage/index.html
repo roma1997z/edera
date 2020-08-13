@@ -1,0 +1,595 @@
+{% load static %}
+<style>
+.lang_btn{
+background:None;
+color:white;
+border:None;
+}
+</style>
+  <!--==========================
+  Header
+  ============================-->
+  <header id="header">
+    <div class="container">
+
+      <div id="logo" >
+        <a href="#hero"><img src="{% static  'img/TZ-logo.png' %}" height="150%" alt="" title="" /></img></a>
+
+        <!-- Uncomment below if you prefer to use a text logo -->
+        <!--<h1><a href="#hero">Regna</a></h1>-->
+      </div>
+
+      <nav id="nav-menu-container">
+        <ul class="nav-menu">
+		<li><a href="#facts">{{menu_statistic}}</a></li>
+          <li><a href="#about">{{menu_project}}</a></li>
+          <li><a href="#services">{{menu_prepare}}</a></li>
+		  <li><a href="#portfolio">{{menu_apply}}</a></li>
+          <li><a href="#team">{{menu_team}}</a></li>
+		  <li><a href="#contact">{{menu_contact}}</a></li>
+        <li>
+		<form action="" method="post" style = "margin-left:40px;">
+		{% csrf_token %}
+		
+		<button class = "lang_btn" type = "submit" name = 'rus'>
+		<img src = "{% static 'img/rus.png'%}" ></img>
+		{% if lang == 'rus' %} <u>rus</u> {%else%} rus {% endif %}
+		</button>
+		<button class = "lang_btn" type = "submit" name = 'eng' style="margin-left:10px;">
+		<img src = "{% static 'img/eng.png'%}" ></img>
+		{% if lang == 'eng' %} <u>eng</u> {%else%} eng {% endif %}
+		</button>
+		</form>
+		</li>
+		</ul>
+      </nav><!-- #nav-menu-container -->
+    </div>
+  </header><!-- #header -->
+
+<script src="{% static  'camps/lib/wow/wow.min.js' %}"></script>
+<script>
+wow = new WOW(
+{
+  boxClass: 'wow', // default
+  animateClass: 'animated', // default
+  offset: 0, // default
+  mobile: false,//fault
+  live: true // default
+}
+)
+wow.init();</script>
+  <!--==========================
+    Hero Section
+  ============================-->
+  <section id="hero">
+    <div class="hero-container">
+      <h1>EdEra</h1>
+      <h2>{{head_line_1}}
+	  <br>{{head_line_2}}
+	  <br>{{head_line_3}}</h2>
+	  <h3>{{sub_head_line_1}}
+<br>{{sub_head_line_2}}</h3>
+      <a href="#contact" class="btn-get-started">{{head_button}}</a>
+
+    </div>
+  </section><!-- #hero -->
+
+  <main id="main">
+
+      <!--==========================
+      Facts Section
+    ============================-->
+    <section id="facts">
+      <div class="container">
+        <div class="section-header">
+          <h3 class="section-title">{{menu_statistic}}</h3>
+          <p class="section-description">{{statistic_description}}</p>
+        </div>
+		
+		<div class="d-flex justify-center flex-wrap counters">
+		<div class = "col-lg-2 col-md-2 col-sm-6 col-6">
+			<div class="member">
+              <div class="pic"><img src="{% static '/img/university/eng.svg' %}" alt="" width = "100%" height = "80px;"> </div>              
+              <span data-toggle="counter-up" style = "text-align:center;font-size:32;">{{eng_sum}}</span>
+            </div>
+		</div>
+		<div class = "col-lg-10 col-md-10 col-sm-12 col-12">
+		<div class = "row">
+		{% for teacher in university_list %}
+          <div class="col-lg-3 col-md-3 col-sm-6 col-6">
+            <div class="member">
+              <div class="pic"><img src="{% static '/img/university/' %}{{teacher.photo}}" alt="" width = "100%" height = "80px;"> </div>              
+              <span data-toggle="counter-up" style = "text-align:center;font-size:32;">{{teacher.number}}</span>
+            </div>
+          </div>
+		{% endfor %}
+		</div>
+		</div>
+
+      </div>
+	  
+	  <div class="d-flex justify-center flex-wrap counters">
+		<div class = "col-lg-2 col-md-2 col-sm-6 col-6">
+			<div class="member">
+              <div class="pic"><img src="{% static '/img/university/usa.svg' %}" alt="" width = "100%" height = "80px;"> </div>              
+              <span data-toggle="counter-up" style = "text-align:center;font-size:32;">{{usa_sum}}</span>
+            </div>
+		</div>
+		<div class = "col-lg-10 col-md-10 col-sm-12 col-12">
+		<div class = "row">
+		{% for teacher in university_list2 %}
+          <div class="col-lg-3 col-md-3 col-sm-6 col-6">
+            <div class="member">
+              <div class="pic"><img src="{% static '/img/university/' %}{{teacher.photo}}" alt="" width = "100%" height = "80px;"> </div>              
+              <span data-toggle="counter-up" style = "text-align:center;font-size:32;">{{teacher.number}}</span>
+            </div>
+          </div>
+		{% endfor %}
+		</div>
+		</div>
+
+      </div>
+	  
+	  </div>
+    </section><!-- #facts -->
+  
+  
+    <!--==========================
+      About Us Section
+    ============================-->
+    <section id="about">
+      <div class="container">
+	  <div class="section-header">
+          <h3 class="section-title">{{menu_project}}</h3>
+          <p class="section-description">
+		  </p>
+        </div>
+        <div class="row about-container">
+		
+          <div class="col-lg-6 content order-lg-1 order-1">
+		  <div class="icon-box">
+		  <div class="icon"><i class="fa fa-handshake-o"></i></div>
+		  <div class ="title-div">
+            <h4 class="title">{{ strategy_zkakomstvo_title }}</h4></div></div>
+			<div class = "description">
+            <br>
+			<ul>
+			{% autoescape off %}
+			{{ strategy_zkakomstvo }}
+			{% endautoescape %}
+			</ul>
+            
+</div>
+</div>
+<div class="col-lg-6 order-lg-2 order-2">
+            <div class="icon-box">
+              <div class="icon"><i class="fa fa-table"></i></div>
+			  <div class ="title-div">
+            <h4 class="title">{{strategy_otbor_title}}</h4></div>
+			</div>
+			  <div class="description">
+              <br>
+			  <ul>
+			  {% autoescape off %}
+			{{ strategy_otbor }}
+			{% endautoescape %}
+</ul>
+			  
+            </div>
+          </div>
+</div>	
+</div>	
+	
+    </section><!-- #about -->
+
+
+
+    <!--==========================
+      Services Section
+    ============================-->
+    <section id="services">
+      <div class="container wow FadeIn">
+        <div class="section-header">
+          <h3 class="section-title">{{menu_prepare}}</h3>
+          <p class="section-description"></p>
+        </div>
+        <div class="d-flex justify-content-center flex-wrap">
+          <div class="col-lg-4 col-md-6">
+            <div class="box">
+              <div class="icon"><i class="fa fa-pagelines"></i></div>
+              <h4 class="title">{{train_bachelor}}</h4>
+              <p class="description">
+			  {% autoescape off %}
+			{{ prepare_bachelor }}
+			{% endautoescape %}</p>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <div class="box">
+              <div class="icon"><i class="fa fa-tree"></i></div>
+              <h4 class="title">{{train_master}}</h4>
+              <p class="description">
+			  {% autoescape off %}
+			{{ prepare_master }}
+			{% endautoescape %}
+		​</p>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <div class="box">
+              <div class="icon"><i class="fa fa-language"></i></div>
+              <h4 class="title">{{train_english}}</h4>
+              <p class="description">
+			  {% autoescape off %}
+			{{ prepare_english }}
+			{% endautoescape %}
+			</p>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6">
+            <div class="box">
+              <div class="icon"><i class="fa fa-lightbulb-o"></i></div>
+              <h4 class="title">{{train_olymp}}</h4>
+              <p class="description">
+			  {% autoescape off %}
+			{{ prepare_olympiad }}
+			{% endautoescape %}
+			 </p>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <div class="box">
+              <div class="icon"><i class="fa fa-pencil"></i></div>
+              <h4 class="title">{{train_exam}}</h4>
+              <p class="description">
+			  {% autoescape off %}
+			{{ prepare_dvi }}
+			{% endautoescape %}
+			</p>
+            </div>
+          </div>
+		  
+        </div>
+
+      </div>
+    </section><!-- #services -->
+
+    <!--==========================
+    Call To Action Section
+    ============================-->
+    <section id="call-to-action">
+      <div class="container wow fadeIn">
+        <div class="row">
+          <div class="col-lg-9 text-center text-lg-left">
+		  <h3 class="cta-title">{{ university_tour_title}}</h3>
+		  <div class="cta-text">
+		  <ul>
+		  {% autoescape off %}
+			{{ university_tour}}
+			{% endautoescape %}
+		  
+</ul> 
+</div>
+          </div>
+          <div class="col-lg-3 cta-btn-container text-center">
+            <a class="cta-btn align-middle" href="#contact" >{{head_button}}</a>
+          </div>
+        </div>
+
+      </div>
+    </section><!-- #call-to-action -->
+
+    <!--==========================
+      Portfolio Section
+    ============================-->
+    <section id="portfolio">
+      <div class="container wow FadeIn">
+	  <div class="section-header">
+          <h3 class="section-title">{{menu_apply}}</h3>
+          <p class="section-description"> </p>
+        </div>
+        <div class="row">
+          <div class="col-lg-4 col-md-6">
+            <div class="box">
+              <div class="icon"><i class="fa fa-envelope"></i></div>
+              <h4 class="title">{{apply_docs_title}}</h4>
+              <div class="description">
+			  <ul>
+			  {% autoescape off %}
+			{{ apply_docs}}
+			{% endautoescape %}
+			  
+</ul>
+​</div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <div class="box">
+              <div class="icon"><i class="fa fa-microphone "></i></div>
+              <h4 class="title">{{ apply_interview_title}}</h4>
+			  
+              <div class="description"><ul>
+			  {% autoescape off %}
+			{{ apply_interview}}
+			{% endautoescape %}
+</ul></div>
+
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <div class="box">
+              <div class="icon"><i class="fa fa-paper-plane"></i></div>
+              <h4 class="title">{{ apply_after_title}}</h4>
+              <div class="description">
+			  <ul>
+			  {% autoescape off %}
+			{{ apply_after}}
+			{% endautoescape %}
+			</ul>
+			  </div>
+            </div>
+          </div>
+		  </div>
+
+      </div>
+    </section><!-- #portfolio -->
+
+    <!--==========================
+      Team Section
+    ============================-->
+    <section id="team">
+      <div class="container">
+        <div class="section-header">
+          <h3 class="section-title">{{menu_team}}</h3>
+          <p class="section-description">{{team_description}}</p>
+        </div>
+		<div class="d-flex justify-content-center flex-wrap">
+		{% for teacher in teachers_list_main %}
+          <div class="col-lg-4 col-md-6 col-10">
+            <div class="member">
+              <div class="pic"><img src="{% static '/img/teachers/' %}{{teacher.photo}}" alt=""
+			  style = "width:auto;max-width:100%;height:auto;"> </div>
+
+              <h4>{{teacher.name}}</h4>
+			  {% if teacher.subject %}
+			  <div class = "div-zero">
+			  <label class = "label-base">{{teacher_subject}}:</label> {{teacher.subject}}
+			  </div>
+			  
+			  {% endif %}
+			  {% if teacher.position %}
+			  <div class = "div-zero">
+			  <label class = "label-base">{{teacher_role}}:</label> {{teacher.position}}
+			  </div>
+			  
+			  {% endif %}
+			  {% if teacher.education %}
+			  <div class = "div-zero">
+			  <label class = "label-base">{{teacher_education}}:</label> {{teacher.education}}
+			  </div>
+			  
+			  {% endif %}
+			  {% if teacher.experience %}
+			  <div class = "div-zero">
+			  <label class = "label-base">{{teacher_exp}}:</label>
+			  {{teacher.experience}}
+			  </div>
+			  
+			  {% endif %}
+			  {% if teacher.interest %}
+			  <div class = "div-zero">
+			  <label class = "label-base">{{teacher_interest}}:</label>
+			  {{teacher.interest}}
+			  </div>
+			  {% endif %}
+			  <span>{{teacher.description}}</span>
+			  
+			  
+            </div>
+          </div>
+		{% endfor %}
+		</div>
+		
+		<div class="d-flex justify-content-center flex-wrap">
+		{% for teacher in teachers_list_main3 %}
+          <div class="col-lg-4 col-md-6 col-10">
+            <div class="member">
+              <div class="pic"><img src="{% static '/img/teachers/' %}{{teacher.photo}}" alt=""
+			  style = "width:auto;max-width:100%;height:auto;"> </div>
+
+              <h4>{{teacher.name}}</h4>
+			  {% if teacher.subject %}
+			  <div class = "div-zero">
+			  <label class = "label-base">{{teacher_subject}}:</label> {{teacher.subject}}
+			  </div>
+			  
+			  {% endif %}
+			  {% if teacher.position %}
+			  <div class = "div-zero">
+			  <label class = "label-base">{{teacher_role}}:</label> {{teacher.position}}
+			  </div>
+			  
+			  {% endif %}
+			  {% if teacher.education %}
+			  <div class = "div-zero">
+			  <label class = "label-base">{{teacher_education}}:</label> {{teacher.education}}
+			  </div>
+			  
+			  {% endif %}
+			  {% if teacher.experience %}
+			  <div class = "div-zero">
+			  <label class = "label-base">{{teacher_exp}}:</label>
+			  {{teacher.experience}}
+			  </div>
+			  
+			  {% endif %}
+			  {% if teacher.interest %}
+			  <div class = "div-zero">
+			  <label class = "label-base">{{teacher_interest}}:</label>
+			  {{teacher.interest}}
+			  </div>
+			  {% endif %}
+			  <span>{{teacher.description}}</span>
+			  
+			  
+            </div>
+          </div>
+		{% endfor %}
+		</div>
+		
+        <div class="d-flex justify-content-center flex-wrap">
+		{% for teacher in teachers_list %}
+          <div class="col-lg-4 col-md-6 col-10">
+            <div class="member">
+              <div class="pic"><img src="{% static '/img/teachers/' %}{{teacher.photo}}" alt=""> </div>
+
+              <h4>{{teacher.name}}</h4>
+			  
+              {% if teacher.subject %}
+			  <div class = "div-zero">
+			  <label class = "label-base">{{teacher_subject}}:</label> {{teacher.subject}}
+			  </div>
+			  
+			  {% endif %}
+			  {% if teacher.position %}
+			  <div class = "div-zero">
+			  <label class = "label-base">{{teacher_role}}:</label> {{teacher.position}}
+			  </div>
+			  
+			  {% endif %}
+			  {% if teacher.education %}
+			  <div class = "div-zero">
+			  <label class = "label-base">{{teacher_education}}:</label> {{teacher.education}}
+			  </div>
+			  
+			  {% endif %}
+			  {% if teacher.experience %}
+			  <div class = "div-zero">
+			  <label class = "label-base">{{teacher_exp}}:</label>
+			  {{teacher.experience}}
+			  </div>
+			  
+			  {% endif %}
+			  {% if teacher.interest %}
+			  <div class = "div-zero">
+			  <label class = "label-base">{{teacher_interest}}:</label>
+			  {{teacher.interest}}
+			  </div>
+			  {% endif %}
+			  <span>{{teacher.description}}</span>
+			  
+			  
+             
+            </div>
+          </div>
+		{% endfor %}
+
+        </div>
+
+      </div>
+    </section><!-- #team -->
+
+	 
+    <!--==========================
+      Contact Section
+    ============================-->
+    <section id="contact">
+      <div class="container">
+        <div class="section-header">
+          <h3 class="section-title">{{menu_contact}}</h3>
+          <p class="section-description">{{contact}}
+		  </p>
+        </div>
+      </div>
+
+      <div class="container wow fadeInUp mt-5">
+        <div class="row justify-content-center">
+
+          <div class="col-lg-3 col-md-4">
+
+            <div class="info">
+              <div>
+                <i class="fa fa-map-marker"></i>
+                <p>{{contact_city}}</p>
+              </div>
+
+              <div>
+                <i class="fa fa-envelope"></i>
+                <p>info@edera-school.com</p>
+              </div>
+<!--
+			  <div>
+				<i class="fa fa-globe"></i>
+				<p>
+                <a href = "http://mmmf-camp.com" target = "_blank"> Все школы МММФ</a></p>
+              </div>
+
+			  <div>
+				<i class="fa fa-photo"></i>
+				<p>
+                <a href = "https://vk.com/mmmf.camp" target = "_blank"> Как проходили летние смены</a></p>
+              </div>
+-->
+              <div>
+                <i class="fa fa-phone"></i>
+                <p>+7 925 752 27 02</p>
+              </div>
+            </div>
+
+            <div class="social-links">
+              <a href="https://api.whatsapp.com/send?phone=+79772663012"  target = "_blank" class="vk"><i class="fa fa-whatsapp"></i></a>
+              <a href="https://www.instagram.com/edera_school/"  target = "_blank" class="instagram"><i class="fa fa-instagram"></i></a>
+			  <a href="{{link_youtube}}"  target = "_blank" class="vk"><i class="fa fa-youtube"></i></a>
+			</div>
+
+          </div>
+
+          <div class="col-lg-5 col-md-8">
+            <div class="form">
+			{% if success_message %}
+              <div id="sendmess">{{success_message}}</div>
+              <!--<div id="errormess">{{error_message}}</div>-->
+			{% else %}
+			
+              <form action="#contact" method="post">
+
+			  {% csrf_token %}
+                <div class="form-group">
+				<label>{{contact_label}}</label>
+                  <input type="text" class="form-control" name="{{form.name.html_name}}" id="{{form.name.id_for_label}}"
+				  placeholder="+71234567891"  data-msg="" >
+                  <div class="validation"></div>
+                </div>
+				<!--
+                <div class="form-group">
+                  <input type="email" class="form-control" name="{{form.from_email.html_name}}" 
+				  id="{{form.from_email.id_for_label}}" placeholder="E-mail" data-rule="email" data-msg="Please enter a valid email" required />
+                  <div class="validation"></div>
+                </div>
+                <div class="form-group">
+					<input type="text" class="form-control" name="{{form.subject.html_name}}" 
+					id="{{form.subject.id_for_label}}" placeholder="Тема"  data-msg="" >
+					<div class="validation"></div>
+                </div>
+                <div class="form-group">
+                  <textarea class="form-control" name="{{form.message.html_name}}" 
+				  id="{{form.message.id_for_label}}" rows="5" placeholder="Сообщение"></textarea>
+                  <div class="validation"></div>
+                </div>
+				-->
+                <div class="text-center"><button type="submit" name = "phone">{{phone_call}}</button></div>
+              </form>
+			 {% endif %}
+            </div>
+          </div>
+
+
+
+
+        </div>
+
+      </div>
+    </section><!-- #contact -->
+
+  </main>
