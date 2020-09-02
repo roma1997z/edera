@@ -2,5 +2,5 @@ db.sqlite3
 /tapartners
 /static
 /media
-/./__pycache__
-/./migrations
+/*/__pycache__
+/*/migrations
