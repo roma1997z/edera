@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+    <head>
+        <title>Edera Quiz</title>
+
+        <meta name="viewport" content="width=device-width"/>
+
+          <!-- Bootstrap CSS File -->
+        <link href="{% static  'lib/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+        <link rel="stylesheet" href="https://surveyjs.azureedge.net/1.7.28/survey.css"/>
+        <link href="https://surveyjs.azureedge.net/1.7.28/modern.css" type="text/css" rel="stylesheet"/>
+        <!--
+        <script src="https://unpkg.com/jquery"></script>
+        <script src="https://surveyjs.azureedge.net/1.7.28/survey.jquery.js"></script>
+        <link href="https://surveyjs.azureedge.net/1.7.28/modern.css" type="text/css" rel="stylesheet"/>
+        -->
+
+    </head>
+    <style>
+    p, label, th, td, span{
+    font-size:18px;
+    }
+    button, input{
+    font-size:24px;
+    }
+    table{
+    text-align:center;
+    }
+    .btn{
+    font-size:24px;
+    height:100px;
+    }
+    </style>
+    <body>
+    <div class = "container">
+        <form>
+            {% csrf_token %}
+        </form>
+        <div id="surveyElement"></div>
+        </div>
+    <div class = "container">
+        <div id = "resultElement">
+
+        </div>
+    </div>
+    <script src="{% static  'lib/jquery/jquery.min.js' %}"></script>
+    <!--
+    <script src="{% static  'lib/bootstrap/js/bootstrap.min.js' %}"></script>-->
+    <script src="https://surveyjs.azureedge.net/1.7.28/survey.jquery.min.js"></script>
+
+<script>
+Survey.StylesManager.applyTheme("modern");
+
+
+var surveyJSON = {{quiz|safe}};
+
+console.dir(surveyJSON);
+function sendDataToServer(survey) {
+    //send Ajax request to your web server.
+    console.dir(survey.data);
+    $.post($(location).attr("href"),
+			survey.data,
+			function(response){
+			console.log(response);
+			$("#resultElement").html("Результат: Интолерантность к неопределённости - " + response.r1 +
+			", Толерантность к неопределённости - " + response.r2);
+			}
+            )
+}
+
+var survey = new Survey.Model(surveyJSON);
+$("#surveyElement").Survey({
+    model: survey,
+    onComplete: sendDataToServer
+});
+</script>
+    </body>
+</html>

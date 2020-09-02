@@ -68,3 +68,19 @@ class ContactForm(forms.ModelForm):
     class Meta:
         model = Contact
         fields = ['name', 'from_email', 'subject', 'message']
+
+class Quiz(models.Model):
+    note_id = models.AutoField(primary_key=True)
+
+    name = models.CharField(max_length = 200)
+    data = models.FileField(upload_to="quiz")
+    date = models.DateTimeField(blank=True, default=timezone.now)
+
+class QuizResult(models.Model):
+    note_id = models.AutoField(primary_key=True)
+
+    quiz_id = models.ForeignKey(Quiz, on_delete=models.CASCADE)
+    email = models.CharField(max_length = 64)
+    result = models.TextField()
+
+    date = models.DateTimeField(blank=True, default=timezone.now)
