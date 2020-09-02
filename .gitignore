@@ -1,5 +1,6 @@
 db.sqlite
 /tapartners
 /static
+/media
 /./__pycache__
 /./migrations
