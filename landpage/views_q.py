@@ -28,9 +28,9 @@ def quiz1_analyze(data):
 def show_quiz(request, pk):
     if request.method == "GET":
         quiz = Quiz.objects.get(note_id=pk)
-        print("path to json", settings.MEDIA_ROOT + quiz.data.url)
-        with open(os.path.join(settings.MAIN_DIR, quiz.data.url), "r", encoding="utf-8") as f:
-            data = json.load(f)
+        #print("path to json", settings.MEDIA_ROOT + quiz.data.url)
+        #with quiz.data.file as f:
+        data = json.load(quiz.data.file)
         context = {'quiz':json.dumps(data)}
         return render(request, 'landpage/show_quiz.html', context)
 
