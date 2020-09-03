@@ -1,9 +1,12 @@
 from django.shortcuts import render, reverse
 from django.http import HttpResponseRedirect, Http404, JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+
 from .models import Quiz, QuizResult
+from django.conf import settings
 
 import json
-from django.views.decorators.csrf import csrf_exempt
+import os
 
 def quiz_list(request):
     return HttpResponseRedirect(reverse('landpage:show_quiz', kwargs={'pk':1}))
@@ -25,7 +28,8 @@ def quiz1_analyze(data):
 def show_quiz(request, pk):
     if request.method == "GET":
         quiz = Quiz.objects.get(note_id=pk)
-        with open(quiz.data.url, "r", encoding="utf-8") as f:
+        print("path to json", settings.MEDIA_ROOT + quiz.data.url)
+        with open(os.path.join(settings.MAIN_DIR, quiz.data.url), "r", encoding="utf-8") as f:
             data = json.load(f)
         context = {'quiz':json.dumps(data)}
         return render(request, 'landpage/show_quiz.html', context)
