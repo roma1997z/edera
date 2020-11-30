@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Reports</title>
+
+      <!-- Bootstrap CSS File -->
+  <link href="{% static  'lib/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- Favicons -->
+  <link href="{% static  'img/favicon.png' %}" rel="icon">
+  <!-- Libraries CSS Files -->
+  <link href="{% static  'lib/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
+  <link href="{% static  'lib/animate/animate.min.css' %}" rel="stylesheet">
+
+  <!-- Main Stylesheet File -->
+  <link href="{% static  'css/style.css' %}" rel="stylesheet">
+</head>
+<style>
+body{
+margin-top:50px;
+}
+h1{
+text-align:center;
+margin-bottom:20px;
+}
+
+.card{
+border-radius:20px;
+max-width:500px;
+min-width:300px;
+margin-bottom:20px;
+box-shadow: rgba(72, 161, 230, 0.14) 0px 0px 20px;
+}
+
+.card-text{
+font-size:18px;
+}
+
+.card-img-top{
+border-radius:20px 20px 0px 0px;
+height:100%;
+min-height:200px;
+object-fit: cover;
+opacity:70%;
+}
+
+.card-footer:last-child{
+border-radius:0px 0px 20px 20px;
+overflow: hidden;
+}
+
+p{
+font-size:18px;
+text-align:justify;
+}
+
+footer{
+background-color: rgba(0,0,0,.03);
+border-top: 1px solid rgba(0,0,0,.125);
+color:black;
+margin-top:20px;
+min-height:50px;
+padding-top:10px;
+}
+
+.desc{
+font-size:16px;
+}
+</style>
+<body>
+    <div class="card-deck d-flex justify-content-center">
+            {% for el in reports %}
+
+                <div class="card mb-4 mt-4">
+                    <div style = "height:30%;min-height:200px;">
+                    {%if el.photo %}
+                    <img src="{{el.photo.url}}" class="card-img-top" alt="...">
+                    {% else %}
+
+                    {% endif %}
+                    </div>
+                  <div class="card-body">
+                    <h5 class="card-title">{{el.name}}</h5>
+                    <p class="card-text desc">
+                        {{el.desc}}
+                    </p>
+                  </div>
+                  <div class = "card-footer">
+
+                  </div>
+
+                </div>
+
+            {% endfor %}
+        </div>
+
+</body>
+</html>

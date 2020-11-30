@@ -84,3 +84,16 @@ class QuizResult(models.Model):
     result = models.TextField()
 
     date = models.DateTimeField(blank=True, default=timezone.now)
+
+class PersonReport(models.Model):
+    note_id = models.AutoField(primary_key=True)
+
+    photo = models.ImageField(upload_to="person")
+
+    name = models.CharField(max_length=200)
+
+    video_link = models.CharField(max_length=300, blank=True, null=True)
+    desc = models.TextField()
+
+    lang = models.CharField(max_length=100, default='rus')
+    active = models.BooleanField(default=True, blank=True)

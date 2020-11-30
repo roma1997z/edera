@@ -12,6 +12,7 @@ from . import views, views_q
 app_name = 'landpage'
 urlpatterns = [
     path('', views.index, name='index'),
+    path('fame', views.report_view, name='person_report'),
     path('quiz/', views_q.quiz_list, name='quiz_list'),
     path('quiz/<int:pk>/', views_q.show_quiz, name='show_quiz'),
     #path('comments', views.comments, name='comments')

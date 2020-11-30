@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import MyOption, TeachersTZ, University, Contact, TextTZ, Quiz, QuizResult
+from .models import MyOption, TeachersTZ, University, Contact, TextTZ, Quiz, QuizResult, PersonReport
 # Register your models here.
 
 class MyOptionAdmin(admin.ModelAdmin):
@@ -41,6 +41,11 @@ class QuizResultAdmin(admin.ModelAdmin):
     search_fields =['email']
 
 
+class PersonReportAdmin(admin.ModelAdmin):
+    list_display = ('name', 'desc', 'video_link')
+    search_fields =['name']
+    list_filter = ['active']
+
 admin.site.register(MyOption, MyOptionAdmin)
 admin.site.register(TeachersTZ, TeachersTZAdmin)
 admin.site.register(University, UniversityAdmin)
@@ -48,3 +53,4 @@ admin.site.register(Contact, ContactAdmin)
 admin.site.register(TextTZ, TextTZAdmin)
 admin.site.register(Quiz, QuizAdmin)
 admin.site.register(QuizResult, QuizResultAdmin)
+admin.site.register(PersonReport, PersonReportAdmin)

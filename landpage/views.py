@@ -1,10 +1,23 @@
 from django.shortcuts import render
 from django.core.mail import send_mail
 
-from landpage.models import MyOption, TeachersTZ, University, Contact, ContactForm, TextTZ
+from landpage.models import MyOption, TeachersTZ, University, Contact, ContactForm, TextTZ, PersonReport
 # Create your views here.
 # Create your views here.
 template_name = 'landpage/starter.html'
+
+def report_view(request):
+    lang = chooseLang(request)
+
+    context = {}
+    context['local_template'] = 'landpage/index.html'
+    context['lang'] = lang
+
+    reports = list(PersonReport.objects.filter(active=True, lang=lang))
+    context["reports"] = reports
+    print(reports)
+    return render(request, "landpage/report.html", context)
+
 def index(request):
     #latest_question_list = Question.objects.order_by('-pub_date')[:5]---
     #template = loader.get_template('polls/index.html')
