@@ -2,19 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f15a6334-485c-4af2-8cfe-53b4cafd06ab" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/lms/templates/lms/teacher_list.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lms/urls.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lms/views_student.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lms/views_teacher.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/registration/login.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/signup.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lms/forms.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lms/templates/lms/profile.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lms/templates/lms/starter.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/landpage/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/landpage/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/landpage/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/landpage/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/landpage/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/landpage/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/landpage/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/landpage/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lms/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/lms/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lms/templates/lms/teacher_list.html" beforeDir="false" afterPath="$PROJECT_DIR$/lms/templates/lms/teacher_list.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lms/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/lms/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lms/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/lms/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lms/views_student.py" beforeDir="false" afterPath="$PROJECT_DIR$/lms/views_student.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/signup.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/signup.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,11 +30,6 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="JupyterTrust" id="b49c3588-4841-463e-9bd8-ea74f2d0e456" />
-  <component name="ProjectFrameBounds" extendedState="1">
-    <option name="x" value="-10" />
-    <option name="width" value="1465" />
-    <option name="height" value="875" />
-  </component>
   <component name="ProjectId" id="1l0Kdugt9yKY23oeYwhylBg2SsC" />
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
@@ -51,7 +43,7 @@
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../intensiv" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../ate2/anylearn" />
     <property name="settings.editor.selected.configurable" value="xml.catalog" />
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -66,6 +58,7 @@
       <option name="presentableId" value="Default" />
       <updated>1599067322005</updated>
       <workItem from="1606728661291" duration="10254000" />
+      <workItem from="1606912094167" duration="12739000" />
     </task>
     <servers />
   </component>
@@ -73,10 +66,10 @@
     <option name="version" value="3" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="549" y="167" key="FileChooserDialogImpl" timestamp="1606728750834">
+    <state x="549" y="167" key="FileChooserDialogImpl" timestamp="1606913474748">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="549" y="167" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1606728750834" />
+    <state x="549" y="167" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1606913474748" />
   </component>
   <component name="masterDetails">
     <states>

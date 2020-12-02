@@ -1,18 +1,84 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<h1>Учителя</h1>
-{% for teacher in teachers %}
-<h2>{{teacher.name}}</h2>
-<p>
-    {{teacher.info}}
-</p>
+{% extends "lms/starter.html" %}
 
-{% endfor %}
+{% block title %}Профиль{% endblock %}
+{% block content %}
+<form method="POST" id="ffilter">
+    {% csrf_token %}
+    <div class="container">
+        <div class="row">
+            {% for key in interests %}
+            <div class="col-xs-4 mx-1 my-2">
+                <strong class="mx-2">{{key.name}}</strong>
+                <br>
 
-</body>
-</html>
+                <div class="dropdown bootstrap-select">
+                    <select name="interest-select-{{key.key_id}}" class="selectpicker" multiple>
+                        {% for interest in key.options %}
+                        <option value="{{interest.note_id}}">{{interest.name}}</option>
+                        {% endfor %}
+                    </select>
+                 </div>
+
+            </div>
+            {% endfor %}
+
+        </div>
+
+    <button type="submit" class="btn btn-lg btn-success" name="filter" value="1">Найти</button>
+</div>
+</form>
+
+    <div class = "container">
+        <h1>Учитель</h1>
+
+        <h2 id="teacher_name"></h2>
+        <p id="teacher_info">
+
+        </p>
+     <img id="teacher_photo" src="" width="300px;">
+        <input type="hidden" id="teacher_id">
+        <p>
+            <button class="btn btn-success" name="like" value="1" onclick="like(1);">Like</button>
+            <button class="btn btn-warning" name="like" value="-1" onclick="like(-1);">Dislike</button>
+            <button class ="btn btn-info" name="next" value="0" onclick="like(0);">Next</button>
+        </p>
+    </div>
+
+
+
+<script>
+    var token = $('input[name=csrfmiddlewaretoken]').val();
+
+    function show_teacher(teacher){
+        $("#teacher_name").html(teacher.name);
+        $("#teacher_info").html(teacher.info.education);
+        $("#teacher_id").val(teacher.user_id);
+        $("#teacher_photo").prop("src", teacher.photo);
+    }
+
+    function like(islike){
+        var teacher_id = $("#teacher_id").val();
+        opts = {"teacher_id":teacher_id, "like":islike};
+        opts.csrfmiddlewaretoken = token;
+        console.dir(opts);
+        $.post("#", opts,
+                    function(resp){
+                        console.log("new-teacher");
+                        console.dir(resp);
+                        if(resp.error){
+                            show_teacher({"name":resp.error, "id":"0", "info":{}})
+                        } else{
+                            show_teacher(resp);
+                        }
+                    }
+                );
+    }
+
+
+    window.onload = function(){
+        {% autoescape off %}
+        show_teacher({{teacher}});
+        {% endautoescape %}
+    }
+</script>
+{% endblock %}}
