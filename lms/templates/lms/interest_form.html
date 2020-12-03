@@ -10,7 +10,7 @@
                 <div class="dropdown bootstrap-select">
                     <select name="interest" class="selectpicker" multiple>
                         {% for interest in key.options %}
-                        <option value="{{interest.note_id}}">{{interest.name}}</option>
+                        <option id="interest-{{interest.note_id}}" value="{{interest.note_id}}">{{interest.name}}</option>
                         {% endfor %}
                     </select>
                  </div>
@@ -24,3 +24,13 @@
         {% if btn_interest%} {{btn_interest}} {% else %} Найти {% endif %}</button>
 </div>
 </form>
+
+<script>
+        {% autoescape off %}
+        var interests = {{user_interests}};
+        {% endautoescape %}
+        console.log(interests);
+    for(i=0; i<interests.length;i++){
+        $("#interest-"+interests[i]).prop("selected",1);
+    }
+</script>

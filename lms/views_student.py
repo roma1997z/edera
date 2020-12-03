@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from django.forms.models import model_to_dict
 
-from lms.models import TeacherDesc, InterestKey, Interest
+from lms.models import TeacherDesc, InterestKey, Interest, InterestUser
 from lms.models import MatchUser, Lesson
 
 from lms import tools
@@ -56,6 +56,8 @@ class TeacherList(LoginRequiredMixin, TemplateView):
         teacher = self.next_teacher(request)
         if teacher is not None:
             context["teacher"] = self.teacher_info(teacher)
+
+        context['user_interests'] = list(InterestUser.objects.filter(user_id=request.user).values_list("interest__note_id", flat=True))
 
         return render(request, self.template_name, context)
 
