@@ -1,0 +1,27 @@
+{% extends "lms/starter.html" %}
+
+{% block title %}Мои занятия{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Мои уроки</h2>
+    {% for el in lessons %}
+    <strong>{{el.teacher.first_name}}</strong>
+    <br>
+    {{el.day}} ({{el.start_time}}-{{el.end_time}})
+    {% endfor %}
+</div>
+<br>
+
+
+<div class="container">
+    <h2>Понравившиеся учителя</h2>
+
+    {% for el in matches %}
+
+    <strong>{{el.teacher.first_name}}</strong>
+    <br>
+    {% endfor %}
+</div>
+
+{% endblock %}

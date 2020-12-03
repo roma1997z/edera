@@ -10,7 +10,10 @@ from django.shortcuts import get_object_or_404
 from django.forms.models import model_to_dict
 
 from lms.models import TeacherDesc, InterestKey, Interest
-from lms.models import MatchUser
+from lms.models import MatchUser, Lesson
+
+from lms import tools
+
 
 class TeacherList(LoginRequiredMixin, TemplateView):
     template_name = 'lms/teacher_list.html'
@@ -39,17 +42,8 @@ class TeacherList(LoginRequiredMixin, TemplateView):
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
 
-        #teacher_ids = request.session.get("teacher_ids", [])
-        #teachers = User.objects.filter(profile__role="teacher").exclude(user_id__in=teacher_ids)
-
-
         # for interest filtering
-        interests = []
-        interest_key = InterestKey.objects.filter(active=True)
-        for key in interest_key:
-            key_interests = Interest.objects.filter(active=True, key=key).values("note_id", "name")
-            interests.append({"name":key.name, "key_id":key.note_id, "options":key_interests})
-        context["interests"]=interests
+        context["interests"]=tools.get_interest_json()
 
         # teacher list
         """
@@ -87,8 +81,21 @@ class TeacherList(LoginRequiredMixin, TemplateView):
 
         elif "filter" in request.POST:
             request.session.pop("teacher_ids", None)
-            print(request.POST)
+            interests = request.POST.getlist("interest")
+            tools.set_interest(interests, user_id)
             # interests = request.POST["filter"]
 
-
         return HttpResponseRedirect(reverse("lms:teacher_list"))
+
+
+class LessonList(LoginRequiredMixin, TemplateView):
+    template_name = 'lms/lesson_list.html'
+    login_url = 'lk/login/'
+
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+
+        context["matches"] = MatchUser.objects.filter(user_id=request.user, like=True)
+        context["lessons"] = Lesson.objects.filter(user_id=request.user)
+        print(context)
+        return render(request, self.template_name, context)

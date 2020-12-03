@@ -1,0 +1,21 @@
+{% extends "lms/starter.html" %}
+
+{% block title %}О себе (для учителей){% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>О себе</h1>
+    <form method="POST">
+        {% csrf_token %}
+        {% for key in keys %}
+        <div class="form-group">
+        <label for="id-{{key.note_id}}" class="font-weight-bold">{{key.name}}</label>
+        <textarea id="id-{{key.note_id}}" name="key-{{key.note_id}}" class="form-control form-control-lg" rows="5" cols="50">{{key.text}}</textarea>
+
+        </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-lg btn-success">Сохранить</button>
+    </form>
+</div>
+
+{% endblock %}

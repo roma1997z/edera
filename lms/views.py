@@ -38,7 +38,7 @@ def profile_form(request):
     template_name = "lms/profile.html"
     if request.method=="GET":
         form = ProfileForm(instance=request.user.profile, initial={"name":request.user.first_name})
-        return render(request, template_name, context={"form":form})
+        return render(request, template_name, context={"form":form, "email":request.user.email})
     elif request.method=="POST":
         form = ProfileForm(data=request.POST,  files=request.FILES, instance=request.user.profile)
         if form.is_valid():
@@ -47,5 +47,5 @@ def profile_form(request):
             request.user.save()
             return redirect("lms:profile")
         else:
-            return render(request, template_name, {"form":form})
+            return render(request, template_name, {"form":form, "email":request.user.email})
 

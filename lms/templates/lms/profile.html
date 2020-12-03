@@ -5,10 +5,33 @@
 {% block content %}
 <div class="container">
     <h1>Профиль</h1>
-<form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-{{form.as_p}}
-    <button type="submit" class="btn btn-lg btn-success">Сохранить</button>
-    </form>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="form-group">
+            {{form.photo}}
+            </div>
+
+
+            <div class="form-group">
+            <label for="phone">Телефон</label>
+            <input id="phone" name="phone" class="form-control" value="{{form.phone.value}}">
+            </div>
+
+            <div class="form-group">
+            <label for="name">Имя</label>
+            <input id="name" name="name" class="form-control" value="{{form.name.value}}">
+            </div>
+
+            <div class="form-group">
+            <label for="email">Email</label>
+            <input id="email" name="email" class="form-control" value="{{email}}" readonly>
+            </div>
+
+            <button type="submit" class="btn btn-lg btn-success">Сохранить</button>
+            </form>
+
+
+        <a href="{% url 'lms:teacher_desc' %}">О себе (для учителя)</a>
     </div>
 {% endblock %}
