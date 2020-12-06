@@ -11,9 +11,10 @@ from django.forms.models import model_to_dict
 
 from lms.models import TeacherDesc, TeacherKey
 
+
 class TeacherDescForm(LoginRequiredMixin, TemplateView):
     template_name = 'lms/teacher_desc.html'
-    login_url = 'lk/login/'
+    login_url = 'login/'
 
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
@@ -49,7 +50,7 @@ class TeacherDescForm(LoginRequiredMixin, TemplateView):
 
 class InterestForm():
     template_name = 'lms/teacher_desc.html'
-    login_url = 'lk/login/'
+    login_url = 'login/'
 
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)

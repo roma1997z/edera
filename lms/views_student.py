@@ -17,12 +17,12 @@ from lms import tools
 
 class TeacherList(LoginRequiredMixin, TemplateView):
     template_name = 'lms/teacher_list.html'
-    login_url = 'lk/login/'
+    login_url = 'login/'
 
     def teacher_info(self, teacher):
-        info = TeacherDesc.objects.filter(teacher=teacher).values_list("key__key", "text")
+        info = TeacherDesc.objects.filter(teacher=teacher).values_list("key__key","key__name", "text")
         print(info)
-        info = {k:v for k,v in info}
+        info = [{"key":k, "name":name, "text":v} for k,name,v in info]
         # print(model_to_dict(teacher))
         # print(teacher.user_id)
         return {"name":teacher.first_name, "photo": teacher.profile.photo.url if teacher.profile.photo else "", "user_id":teacher.id, "info":info}
@@ -92,7 +92,7 @@ class TeacherList(LoginRequiredMixin, TemplateView):
 
 class LessonList(LoginRequiredMixin, TemplateView):
     template_name = 'lms/lesson_list.html'
-    login_url = 'lk/login/'
+    login_url = 'login/'
 
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)

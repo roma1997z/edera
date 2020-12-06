@@ -9,9 +9,9 @@
         <h1>Учитель</h1>
 
         <h2 id="teacher_name"></h2>
-        <p id="teacher_info">
+        <div id="teacher_info">
 
-        </p>
+        </div>
      <img id="teacher_photo" src="" width="300px;">
         <input type="hidden" id="teacher_id">
         <p>
@@ -28,7 +28,12 @@
 
     function show_teacher(teacher){
         $("#teacher_name").html(teacher.name);
-        $("#teacher_info").html(teacher.info.education);
+        $("#teacher_info").empty();
+        for(i=0;i<teacher.info.length;i++) {
+            var info = teacher.info[i]
+            var el = "<p> <strong>"+info.name+":</strong> "+info.text+"</p>"
+            $("#teacher_info").append(el);
+        }
         $("#teacher_id").val(teacher.user_id);
         $("#teacher_photo").prop("src", teacher.photo);
     }
