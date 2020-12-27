@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.http import HttpResponseRedirect, Http404, JsonResponse, HttpResponse
 
@@ -9,15 +9,17 @@ from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from django.forms.models import model_to_dict
 
-from lms.models import TeacherDesc, InterestKey, Interest, InterestUser
+from lms.models import TeacherTime, TeacherDesc, InterestKey, Interest, InterestUser
 from lms.models import MatchUser, Lesson
 
 from lms import tools
-
+import portion as P
+import math
+import datetime
 
 class TeacherList(LoginRequiredMixin, TemplateView):
     template_name = 'lms/teacher_list.html'
-    login_url = 'login/'
+    login_url = '/lk/login/'
 
     def teacher_info(self, teacher):
         info = TeacherDesc.objects.filter(teacher=teacher).values_list("key__key","key__name", "text")
@@ -25,7 +27,9 @@ class TeacherList(LoginRequiredMixin, TemplateView):
         info = [{"key":k, "name":name, "text":v} for k,name,v in info]
         # print(model_to_dict(teacher))
         # print(teacher.user_id)
-        return {"name":teacher.first_name, "photo": teacher.profile.photo.url if teacher.profile.photo else "", "user_id":teacher.id, "info":info}
+        return {"name":teacher.first_name,
+                "photo": teacher.profile.photo.url if teacher.profile.photo else "",
+                "user_id":teacher.id, "info":info}
 
     def next_teacher(self, request, teacher_id=None):
         teacher_ids = request.session.get("teacher_ids", [])
@@ -90,14 +94,68 @@ class TeacherList(LoginRequiredMixin, TemplateView):
         return HttpResponseRedirect(reverse("lms:teacher_list"))
 
 
+class ChooseTime(LoginRequiredMixin, TemplateView):
+    template_name = 'lms/choose_time.html'
+    login_url = '/lk/login/'
+
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+
+        teacher = User.objects.get(id=self.kwargs['id'])
+
+        t_all = []
+        for day in range(7):
+            t = tools.get_free_teacher_time(teacher, day)
+            print(t)
+            t_all.append([tools.min_to_time(el.lower), tools.min_to_time(el.upper)] for el in t if el.upper>0)
+        context["times"] = t_all
+
+        return render(request, self.template_name, context)
+
+    def post(self, request, *args, **kwargs):
+        teacher = User.objects.get(id=self.kwargs['id'])
+        day = request.POST["day"]
+        print(request.POST)
+        if "choose_time" in request.POST:
+            tt = request.POST["time"].split("-")
+            l = Lesson(teacher=teacher, day=int(request.POST["day"]), user_id=request.user,
+                                                start_time=tt[0], end_time=tt[1])
+            l.save()
+            return redirect(reverse("lms:lesson_list"))
+
+        t = tools.get_free_teacher_time(teacher, day)
+
+        duration = int(request.POST["duration"])
+        good_times = []
+        step_time = 30
+
+        times = list(t)
+        print(times)
+        if len(times)>0:
+            for el in times:
+                start_time=el.lower
+                end_time=el.upper
+                if end_time-start_time>=int(duration):
+                    point_0 = math.ceil(start_time/step_time)
+                    point_1 = math.floor((end_time-duration)/step_time)
+                    good_times += [(tools.to_time(time_0, step_time), tools.to_time(time_0, step_time,duration)) for time_0 in range(point_0, point_1+1)]
+        print(good_times)
+        return JsonResponse({"times":good_times})
+
+
 class LessonList(LoginRequiredMixin, TemplateView):
     template_name = 'lms/lesson_list.html'
-    login_url = 'login/'
+    login_url = '/lk/login/'
 
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
 
         context["matches"] = MatchUser.objects.filter(user_id=request.user, like=True)
-        context["lessons"] = Lesson.objects.filter(user_id=request.user)
+        lessons = []
+        for day in range(7):
+            l = Lesson.objects.filter(user_id=request.user, day=day).order_by("start_time")
+            lessons.append(l)
+        context["lessons"] = lessons
+
         print(context)
         return render(request, self.template_name, context)

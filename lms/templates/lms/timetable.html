@@ -1,0 +1,68 @@
+{% extends "lms/starter.html" %}
+
+{% block title %}Расписание (добавить дату){% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Мое время</h2>
+    <table class="table table-striped">
+    <thead>
+    <th>Понедельник</th>
+    <th>Вторник</th>
+    <th>Среда</th>
+    <th>Четверг</th>
+    <th>Пятница</th>
+    <th>Суббота</th>
+    </thead>
+        <tbody>
+        <tr>
+    {% for day in times %}
+            <td>
+                {% for time in day %}
+                <p id="{{time.note_id}}" onclick="">{{ time.start_time|time:"H:i" }} - {{time.end_time|time:"H:i" }}</p>
+                <button>Удалить</button>
+                {% endfor %}
+            </td>
+            {% endfor %}
+        </tr>
+        </tbody>
+        </table>
+
+    <form method="post" style="max-width: 600px;">
+    <h2>Добавить дату</h2>
+    <br>
+        {% csrf_token %}
+        <div class="form-group row">
+            <label for="start_time"  class="col-sm-2 col-form-label col-form-label-lg">День недели</label>
+            <div class="col-sm-10">
+            <select class="form-control form-control-lg" name="day">
+                <option value="0">Пн</option>
+                <option value="1">Вт</option>
+                <option value="2">Ср</option>
+                <option value="3">Чт</option>
+                <option value="4">Пт</option>
+                <option value="5">Сб</option>
+                <option value="6">Вс</option>
+            </select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="start_time"  class="col-sm-2 col-form-label col-form-label-lg">Начало</label>
+            <div class="col-sm-10">
+            <input type="time" name="start_time" id="start_time" value="10:00" class="form-control form-control-lg">
+                </div>
+        </div>
+        <div class="form-group row">
+            <label for="end_time"  class="col-sm-2 col-form-label col-form-label-lg">Конец</label>
+            <div class="col-sm-10">
+                <input type="time" name="end_time" id="end_time" value="18:00" class="form-control form-control-lg">
+            </div>
+        </div>
+        <button type="submit" class="btn btn-lg btn-success" id="add_btn" name="add_time">Добавить</button>
+
+
+        <button type="submit" class="btn btn-lg btn-success" name="edit_time">Изменить</button>
+        <button type="submit" class="btn btn-lg btn-success" name="del_time">Удалить</button>
+    </form>
+</div>
+{% endblock %}

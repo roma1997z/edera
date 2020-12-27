@@ -1,0 +1,101 @@
+{% extends "lms/starter.html" %}
+
+{% block title %}Время преподавателя{% endblock %}
+
+{% block content %}
+<div class="container">
+
+    <h2>Укажите</h2>
+    <form method="POST">
+        {% csrf_token %}
+    <div class="form-group row">
+            <label for="duration"  class="col-sm-3 col-form-label col-form-label-lg">Длительность занятия</label>
+            <div class="col-sm-9">
+                <div class="input-group" style="width:150px;">
+                    <input type="number" name="start_time" id="duration" value="90"
+                           class="form-control form-control-lg">
+                        <div class="input-group-append">
+                            <span class="input-group-text" id="basic-addon2">мин</span>
+                        </div>
+                </div>
+            </div>
+    </div>
+
+    <div class="form-group row">
+        <label for="day"  class="col-sm-3 col-form-label col-form-label-lg">День недели</label>
+        <div class="col-sm-9">
+        <select class="form-control form-control-lg" name="day" id="day" style="max-width: 150px;">
+            <option value="0">Пн</option>
+            <option value="1">Вт</option>
+            <option value="2">Ср</option>
+            <option value="3">Чт</option>
+            <option value="4">Пт</option>
+            <option value="5">Сб</option>
+            <option value="6">Вс</option>
+        </select>
+        </div>
+    </div>
+    <button type="button" onclick="search_period();" class="btn btn-lg btn-info">Показать варианты</button>
+
+    <div id="time-form" style="display:None;">
+        <br>
+        <div class="form-group row">
+            <label for="time"  class="col-sm-3 col-form-label col-form-label-lg">Выберите время</label>
+            <div class="col-sm-9">
+        <select id="time" class="form-control form-control-lg" name="time" style="max-width: 250px">
+
+        </select>
+            </div>
+        </div>
+        <button type="submit" name="choose_time" class="btn btn-lg btn-success">Выбрать</button>
+    </div>
+    </form>
+
+    <script>
+        var token = $('input[name=csrfmiddlewaretoken]').val();
+        function search_period(){
+            var day = $("#day").val();
+            var duration = $("#duration").val();
+            opts = {"day":day, "duration":duration};
+            opts.csrfmiddlewaretoken = token;
+            $.post("#", opts,
+                    function(resp) {
+
+                    $("#time").empty();
+                    for(i=0;i<resp.times.length;i++){
+                        var t = resp.times[i];
+                        $("#time").append("<option value='"+t[0]+"-"+t[1]+"'>"+t[0]+"-"+t[1]+"</option>");
+                    }
+                    $("#time-form").show();
+            });
+        }
+    </script>
+
+
+<hr>
+    <h2>Возможное время</h2>
+    <table class="table table-striped">
+    <thead>
+    <tr>
+    <td>Понедельник</td>
+    <td>Вторник</td>
+    <td>Среда</td>
+    <td>Четверг</td>
+    <td>Пятница</td>
+        <td>Суббота</td></tr>
+    </thead>
+        <tbody>
+        <tr>
+    {% for day in times %}
+            <td>
+                {% for time in day %}
+                <p  onclick="">{{ time.0 }} - {{time.1 }}</p>
+                {% endfor %}
+            </td>
+            {% endfor %}
+        </tr>
+        </tbody>
+        </table>
+
+</div>
+{% endblock %}

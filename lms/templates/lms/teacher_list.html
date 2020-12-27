@@ -19,14 +19,16 @@
             <button class="btn btn-warning" name="like" value="-1" onclick="like(-1);">Dislike</button>
             <button class ="btn btn-info" name="next" value="0" onclick="like(0);">Next</button>
         </p>
+        <a id="a_time" href="">Выбрать время</a>
     </div>
 
 
 
 <script>
     var token = $('input[name=csrfmiddlewaretoken]').val();
-
+    var choose_time_url = "/lk/choose/"
     function show_teacher(teacher){
+        console.log(teacher.user_id);
         $("#teacher_name").html(teacher.name);
         $("#teacher_info").empty();
         for(i=0;i<teacher.info.length;i++) {
@@ -36,6 +38,7 @@
         }
         $("#teacher_id").val(teacher.user_id);
         $("#teacher_photo").prop("src", teacher.photo);
+        $("#a_time").prop("href", choose_time_url+teacher.user_id+"/");
     }
 
     function like(islike){

@@ -2,8 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f15a6334-485c-4af2-8cfe-53b4cafd06ab" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/other.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lms/templates/lms/choose_time.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lms/templates/lms/timetable.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lms/templates/lms/lesson_list.html" beforeDir="false" afterPath="$PROJECT_DIR$/lms/templates/lms/lesson_list.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lms/templates/lms/profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/lms/templates/lms/profile.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lms/templates/lms/teacher_list.html" beforeDir="false" afterPath="$PROJECT_DIR$/lms/templates/lms/teacher_list.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lms/tools.py" beforeDir="false" afterPath="$PROJECT_DIR$/lms/tools.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lms/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/lms/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lms/views_student.py" beforeDir="false" afterPath="$PROJECT_DIR$/lms/views_student.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lms/views_teacher.py" beforeDir="false" afterPath="$PROJECT_DIR$/lms/views_teacher.py" afterDir="false" />
     </list>
@@ -37,7 +44,7 @@
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../ate2/anylearn" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="xml.catalog" />
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -53,7 +60,10 @@
       <updated>1599067322005</updated>
       <workItem from="1606728661291" duration="10254000" />
       <workItem from="1606912094167" duration="21616000" />
-      <workItem from="1607265397871" duration="743000" />
+      <workItem from="1607265397871" duration="2070000" />
+      <workItem from="1608410206850" duration="3996000" />
+      <workItem from="1608476078361" duration="1800000" />
+      <workItem from="1608993606747" duration="11801000" />
     </task>
     <servers />
   </component>

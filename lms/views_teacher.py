@@ -9,8 +9,8 @@ from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from django.forms.models import model_to_dict
 
-from lms.models import TeacherDesc, TeacherKey
-
+from lms.models import TeacherDesc, TeacherKey, TeacherTime
+from lms import tools
 
 class TeacherDescForm(LoginRequiredMixin, TemplateView):
     template_name = 'lms/teacher_desc.html'
@@ -46,6 +46,29 @@ class TeacherDescForm(LoginRequiredMixin, TemplateView):
                 obj.save()
 
         return redirect("lms:teacher_desc")
+
+
+class AddTime(LoginRequiredMixin, TemplateView):
+    template_name = 'lms/timetable.html'
+    login_url = '/lk/login/'
+
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+        teacher = request.user
+        if request.user.profile.role != "teacher":
+            return HttpResponseForbidden("Only for teachers")
+
+        context["times"] =tools.get_teacher_time(teacher)
+        return render(request, self.template_name, context=context)
+
+    def post(self, request, *args, **kwargs):
+        teacher = request.user
+        if "add_time" in request.POST:
+            TeacherTime(teacher=teacher, day=request.POST["day"],
+                        start_time=request.POST["start_time"],
+                        end_time=request.POST["end_time"]).save()
+
+        return redirect("lms:teacher_time")
 
 
 class InterestForm():
