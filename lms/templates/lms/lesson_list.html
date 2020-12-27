@@ -19,14 +19,47 @@
     </thead>
         <tbody>
         <tr>
+            {% if teacher %}
+            {% for day in lessons %}
+            <td>
+                {% for time in day %}
+                <div>
+                <strong>{{time.user_id.first_name}}</strong>
+
+                <p>{{ time.start_time|time:"H:i" }} - {{time.end_time|time:"H:i" }}</p>
+                {% if time.active == 2%}
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="note_id" value="{{time.note_id}}">
+                        <button type="sumbit" value="1" name="decision" class="btn btn-success">
+                            <i class="fa fa-check"></i>
+                        </button>
+                        <button type="sumbit" value="0" name="decision" class="btn btn-danger">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </form>
+                    {% endif %}
+                    <hr>
+                </div>
+
+                {% endfor %}
+            </td>
+            {% endfor %}
+
+            {% else %}
     {% for day in lessons %}
             <td>
                 {% for time in day %}
                 <strong>{{time.teacher.first_name}}</strong>
+                {% if time.active == 2%}
+                <small>(ждем ответа преподаватель</small>
+                {% endif %}
                 <p>{{ time.start_time|time:"H:i" }} - {{time.end_time|time:"H:i" }}</p>
                 {% endfor %}
             </td>
             {% endfor %}
+
+            {% endif %}
         </tr>
         </tbody>
         </table>

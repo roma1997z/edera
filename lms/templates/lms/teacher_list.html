@@ -18,6 +18,9 @@
             <button class="btn btn-success" name="like" value="1" onclick="like(1);">Like</button>
             <button class="btn btn-warning" name="like" value="-1" onclick="like(-1);">Dislike</button>
             <button class ="btn btn-info" name="next" value="0" onclick="like(0);">Next</button>
+            {% if moderator %}
+            <button type="button" class="btn btn-warning" onclick="go_mod();">Модерация</button>
+            {% endif %}
         </p>
         <a id="a_time" href="">Выбрать время</a>
     </div>
@@ -59,7 +62,10 @@
                 );
     }
 
-
+    function go_mod(){
+        var base_url ="{% url 'lms:profile' %}";
+        window.location.href=base_url+$("#teacher_id").val()+"/";
+    }
     window.onload = function(){
         {% autoescape off %}
         show_teacher({{teacher}});

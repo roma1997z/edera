@@ -4,19 +4,30 @@
 
 {% block content %}
 <div class="container">
-
+    <br>
+<h2>Преподаватель {{teacher.first_name}}</h2>
+    <br>
     <h2>Укажите</h2>
     <form method="POST">
         {% csrf_token %}
     <div class="form-group row">
             <label for="duration"  class="col-sm-3 col-form-label col-form-label-lg">Длительность занятия</label>
             <div class="col-sm-9">
-                <div class="input-group" style="width:150px;">
+                <div style="width:150px;">
+                    <select class="form-control form-control-lg" id="duration"
+                            style="max-width: 150px;" onchange="$('#time-form').hide();">
+                        <option value="30">30 мин</option>
+                        <option value="45">45 мин</option>
+                        <option value="60" selected>1 час</option>
+                        <option value="90">1.5 часа</option>
+                        <option value="120">2 часа</option>
+                    </select>
+                    <!--
                     <input type="number" name="start_time" id="duration" value="90"
                            class="form-control form-control-lg">
                         <div class="input-group-append">
                             <span class="input-group-text" id="basic-addon2">мин</span>
-                        </div>
+                        </div>-->
                 </div>
             </div>
     </div>
@@ -24,14 +35,15 @@
     <div class="form-group row">
         <label for="day"  class="col-sm-3 col-form-label col-form-label-lg">День недели</label>
         <div class="col-sm-9">
-        <select class="form-control form-control-lg" name="day" id="day" style="max-width: 150px;">
-            <option value="0">Пн</option>
-            <option value="1">Вт</option>
-            <option value="2">Ср</option>
-            <option value="3">Чт</option>
-            <option value="4">Пт</option>
-            <option value="5">Сб</option>
-            <option value="6">Вс</option>
+        <select class="form-control form-control-lg" name="day" id="day"
+                style="max-width: 150px;"  onchange="$('#time-form').hide();">
+            {% if week %}
+            {% for day in week %}
+            <option value="{{day.0}}">{{day.1}}</option>
+            {% endfor %}
+            {% else %}
+            <option>Нет доступного времени</option>
+            {% endif %}
         </select>
         </div>
     </div>
@@ -49,6 +61,12 @@
         </div>
         <button type="submit" name="choose_time" class="btn btn-lg btn-success">Выбрать</button>
     </div>
+
+        <div id="no-time" style="display: none">
+            <br>
+            <p class="text-danger text-lg">Свободный промежуток времени не найден.
+                Попробуйте выбрать другой день недели или уменьшить длительность.</p>
+        </div>
     </form>
 
     <script>
@@ -60,13 +78,19 @@
             opts.csrfmiddlewaretoken = token;
             $.post("#", opts,
                     function(resp) {
-
+                console.log(resp)
+                if(resp.times.length>0) {
                     $("#time").empty();
-                    for(i=0;i<resp.times.length;i++){
+                    for (i = 0; i < resp.times.length; i++) {
                         var t = resp.times[i];
-                        $("#time").append("<option value='"+t[0]+"-"+t[1]+"'>"+t[0]+"-"+t[1]+"</option>");
+                        $("#time").append("<option value='" + t[0] + "-" + t[1] + "'>" + t[0] + "-" + t[1] + "</option>");
                     }
                     $("#time-form").show();
+                }
+                else{
+                    $("#time-form").hide();
+                    $("#no-time").show();
+                }
             });
         }
     </script>
@@ -89,7 +113,7 @@
     {% for day in times %}
             <td>
                 {% for time in day %}
-                <p  onclick="">{{ time.0 }} - {{time.1 }}</p>
+                <p>{{ time.0 }} - {{time.1 }}</p>
                 {% endfor %}
             </td>
             {% endfor %}

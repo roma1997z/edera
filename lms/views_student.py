@@ -45,9 +45,10 @@ class TeacherList(LoginRequiredMixin, TemplateView):
 
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
-
+        if tools.can_edit_teacher_profile(request.user):
+            context["moderator"] = True
         # for interest filtering
-        context["interests"]=tools.get_interest_json()
+        context["interests"] = tools.get_interest_json()
 
         # teacher list
         """
@@ -104,11 +105,19 @@ class ChooseTime(LoginRequiredMixin, TemplateView):
         teacher = User.objects.get(id=self.kwargs['id'])
 
         t_all = []
+        week = ["Пн", "Вт", "Ср", "Чт", "Пт", "Cб", "Вс"]
+        my_week = []
         for day in range(7):
             t = tools.get_free_teacher_time(teacher, day)
-            print(t)
-            t_all.append([tools.min_to_time(el.lower), tools.min_to_time(el.upper)] for el in t if el.upper>0)
+
+            if t[0]!=P.empty():
+                t_all.append([tools.min_to_time(el.lower), tools.min_to_time(el.upper)] for el in t)
+                my_week.append((day, week[day]))
+            else:
+                t_all.append(())
         context["times"] = t_all
+        context["week"] = my_week
+        context["teacher"] = teacher
 
         return render(request, self.template_name, context)
 
@@ -119,7 +128,7 @@ class ChooseTime(LoginRequiredMixin, TemplateView):
         if "choose_time" in request.POST:
             tt = request.POST["time"].split("-")
             l = Lesson(teacher=teacher, day=int(request.POST["day"]), user_id=request.user,
-                                                start_time=tt[0], end_time=tt[1])
+                                                start_time=tt[0], end_time=tt[1], active=2)
             l.save()
             return redirect(reverse("lms:lesson_list"))
 
@@ -127,10 +136,10 @@ class ChooseTime(LoginRequiredMixin, TemplateView):
 
         duration = int(request.POST["duration"])
         good_times = []
-        step_time = 30
+        step_time = 15
 
         times = list(t)
-        print(times)
+
         if len(times)>0:
             for el in times:
                 start_time=el.lower
@@ -152,10 +161,22 @@ class LessonList(LoginRequiredMixin, TemplateView):
 
         context["matches"] = MatchUser.objects.filter(user_id=request.user, like=True)
         lessons = []
-        for day in range(7):
-            l = Lesson.objects.filter(user_id=request.user, day=day).order_by("start_time")
-            lessons.append(l)
+        if request.user.profile.role=="teacher":
+            context["teacher"] = True
+            for day in range(7):
+                l = Lesson.objects.filter(teacher=request.user, day=day, active__gt=0).order_by("start_time")
+                lessons.append(l)
+        else:
+            for day in range(7):
+                l = Lesson.objects.filter(user_id=request.user, day=day, active__gt=0).order_by("start_time")
+                lessons.append(l)
         context["lessons"] = lessons
 
         print(context)
         return render(request, self.template_name, context)
+
+    def post(self, request, *args, **kwargs):
+        l = Lesson.objects.get(note_id=request.POST["note_id"])
+        l.active = int(request.POST["decision"])
+        l.save()
+        return redirect(self.request.path_info)

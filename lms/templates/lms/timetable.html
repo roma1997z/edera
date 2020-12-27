@@ -3,8 +3,18 @@
 {% block title %}Расписание (добавить дату){% endblock %}
 
 {% block content %}
+<style>
+    .time-p:hover{
+        background-color: #edecd6;
+        cursor: pointer;
+    }
+
+    input, select{
+        max-width: 200px;
+    }
+</style>
 <div class="container">
-    <h2>Мое время</h2>
+    <h2>Мое время {% if moderator %}<span class="text-danger">[Модерация]</span> {% endif%}</h2>
     <table class="table table-striped">
     <thead>
     <th>Понедельник</th>
@@ -19,8 +29,9 @@
     {% for day in times %}
             <td>
                 {% for time in day %}
-                <p id="{{time.note_id}}" onclick="">{{ time.start_time|time:"H:i" }} - {{time.end_time|time:"H:i" }}</p>
-                <button>Удалить</button>
+                <p id="{{time.note_id}}" class="time-p" onclick="fillform(this, '{{forloop.parentloop.counter0}}');">
+                    {{ time.start_time|time:"H:i" }} - {{time.end_time|time:"H:i" }}</p>
+
                 {% endfor %}
             </td>
             {% endfor %}
@@ -29,13 +40,13 @@
         </table>
 
     <form method="post" style="max-width: 600px;">
-    <h2>Добавить дату</h2>
+    <h2 id="time-h">Добавить время</h2>
     <br>
         {% csrf_token %}
         <div class="form-group row">
             <label for="start_time"  class="col-sm-2 col-form-label col-form-label-lg">День недели</label>
             <div class="col-sm-10">
-            <select class="form-control form-control-lg" name="day">
+            <select class="form-control form-control-lg" id="day" name="day">
                 <option value="0">Пн</option>
                 <option value="1">Вт</option>
                 <option value="2">Ср</option>
@@ -49,20 +60,40 @@
         <div class="form-group row">
             <label for="start_time"  class="col-sm-2 col-form-label col-form-label-lg">Начало</label>
             <div class="col-sm-10">
-            <input type="time" name="start_time" id="start_time" value="10:00" class="form-control form-control-lg">
+            <input name="start_time" id="start_time" value="10:00" class="form-control form-control-lg">
                 </div>
         </div>
         <div class="form-group row">
             <label for="end_time"  class="col-sm-2 col-form-label col-form-label-lg">Конец</label>
             <div class="col-sm-10">
-                <input type="time" name="end_time" id="end_time" value="18:00" class="form-control form-control-lg">
+                <input name="end_time" id="end_time" value="18:00" class="form-control form-control-lg">
             </div>
         </div>
         <button type="submit" class="btn btn-lg btn-success" id="add_btn" name="add_time">Добавить</button>
 
-
-        <button type="submit" class="btn btn-lg btn-success" name="edit_time">Изменить</button>
-        <button type="submit" class="btn btn-lg btn-success" name="del_time">Удалить</button>
+        <input type="hidden" id="note_id" name="note_id" value="">
+        <div id="edit_del" style="display: none">
+        <button type="submit" class="btn btn-lg btn-warning" name="edit_time">Изменить</button>
+        <button type="submit" class="btn btn-lg btn-danger" name="del_time">Удалить</button>
+            </div>
     </form>
 </div>
+1
+<script>
+    function fillform(p, day){
+        $("#note_id").val($(p).attr('id'));
+        $("#add_btn").hide();
+        $("#edit_del").show();
+        $(".time-p").removeClass("bg-warning");
+        $(p).addClass("bg-warning");
+        $("#time-h").html("Изменить время")
+        $("#day").val(day);
+        var times = $(p).html().replace(/\s/g, '');
+        times = times.split("-");
+        console.log(times)
+        $("#start_time").val(times[0]);
+        $("#end_time").val(times[1]);
+    }
+</script>
+
 {% endblock %}

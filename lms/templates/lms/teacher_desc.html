@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="container">
-    <h1>О себе</h1>
+    <h1>О себе {% if moderator %}<span class="text-danger">[Модерация]</span> {% endif%}</h1>
     <form method="POST">
         {% csrf_token %}
         {% for key in keys %}

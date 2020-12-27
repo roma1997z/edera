@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="container">
-    <h1>Профиль</h1>
+    <h1>Профиль {% if moderator %}<span class="text-danger">[Модерация]</span> {% endif%}</h1>
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
 
@@ -31,9 +31,20 @@
             <button type="submit" class="btn btn-lg btn-success">Сохранить</button>
             </form>
 
-
+    {% if id %}
+    <a href="{% url 'lms:teacher_desc' id %}">О себе (для учителя)</a>
+    <br>
+        <a href="{% url 'lms:teacher_time' id%}">Свободное время</a>
+    {% else %}
         <a href="{% url 'lms:teacher_desc' %}">О себе (для учителя)</a>
     <br>
         <a href="{% url 'lms:teacher_time' %}">Свободное время</a>
+    {% endif %}
+    {% if moderator %}
+    <form method="post">
+        {% csrf_token %}
+    <button type="submit" class="btn btn-warning" name="change_status">Поменять статус (учитель/ученик)</button>
+        </form>
+    {% endif %}
     </div>
 {% endblock %}

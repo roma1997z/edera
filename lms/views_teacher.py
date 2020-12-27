@@ -12,14 +12,17 @@ from django.forms.models import model_to_dict
 from lms.models import TeacherDesc, TeacherKey, TeacherTime
 from lms import tools
 
+
 class TeacherDescForm(LoginRequiredMixin, TemplateView):
     template_name = 'lms/teacher_desc.html'
     login_url = 'login/'
 
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
-        teacher = request.user
-        if request.user.profile.role!="teacher":
+        user_id = kwargs.get('id', None)
+        c, teacher = tools.get_moder_user(request, user_id)
+        context.update(c)
+        if teacher.profile.role!="teacher":
             return HttpResponseForbidden("Only for teachers")
 
         desc=[]
@@ -32,7 +35,8 @@ class TeacherDescForm(LoginRequiredMixin, TemplateView):
         return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
-        teacher = request.user
+        user_id = kwargs.get('id', None)
+        c, teacher = tools.get_moder_user(request, user_id)
         for tkey in request.POST:
             #print(tkey)
             if "key" in tkey:
@@ -45,7 +49,7 @@ class TeacherDescForm(LoginRequiredMixin, TemplateView):
                 obj.text = request.POST[tkey]
                 obj.save()
 
-        return redirect("lms:teacher_desc")
+        return redirect(self.request.path_info)
 
 
 class AddTime(LoginRequiredMixin, TemplateView):
@@ -54,21 +58,36 @@ class AddTime(LoginRequiredMixin, TemplateView):
 
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
-        teacher = request.user
-        if request.user.profile.role != "teacher":
+        user_id = kwargs.get('id', None)
+        c, teacher = tools.get_moder_user(request, user_id)
+        context.update(c)
+
+        if teacher.profile.role != "teacher":
             return HttpResponseForbidden("Only for teachers")
 
         context["times"] =tools.get_teacher_time(teacher)
         return render(request, self.template_name, context=context)
 
     def post(self, request, *args, **kwargs):
-        teacher = request.user
+        user_id = kwargs.get('id', None)
+        c, teacher = tools.get_moder_user(request, user_id)
+
         if "add_time" in request.POST:
             TeacherTime(teacher=teacher, day=request.POST["day"],
                         start_time=request.POST["start_time"],
                         end_time=request.POST["end_time"]).save()
+        elif "edit_time" in request.POST:
+            t = TeacherTime.objects.get(note_id=request.POST['note_id'])
+            t.day = request.POST["day"]
+            t.start_time = request.POST["start_time"]
+            t.end_time = request.POST["end_time"]
+            t.save()
+        elif "del_time" in request.POST:
+            t = TeacherTime.objects.get(note_id=request.POST['note_id'])
+            t.delete()
 
-        return redirect("lms:teacher_time")
+
+        return redirect(self.request.path_info)
 
 
 class InterestForm():

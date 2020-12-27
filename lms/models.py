@@ -15,6 +15,7 @@ class Profile(models.Model):
     fb = models.CharField(max_length=32, blank=True, null=True)
 
     active = models.IntegerField(default=1, blank=True,null=True)
+    moderator = models.BooleanField(default=False)
 
     def __str__(self):
         return "{}".format(self.user_id)
@@ -86,6 +87,8 @@ class Lesson(models.Model):
     day = models.IntegerField()
     start_time = models.TimeField()
     end_time = models.TimeField()
+
+    active = models.IntegerField(default=2) #0 - stopped, 1 - accepted, 2 - waiting for response
 
 
 class TeacherKey(models.Model):
