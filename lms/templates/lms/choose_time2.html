@@ -1,0 +1,82 @@
+{% extends "lms/starter.html" %}
+
+{% load static %}
+{% block title %}Выбор времени{% endblock %}
+
+{% block content %}
+<style>
+    .check {
+        width: 50px;
+        height: 20px;
+        cursor: pointer;
+        zoom:1.5;
+    }
+    .check:hover{
+        background: #edecd6;
+    }
+</style>
+<script src="{% static 'lib/dragselect/selectables.js' %}"></script>
+<div class="container">
+    <form method="post">
+        <h2>Выберите время</h2>
+        {% csrf_token %}
+        <table class="table table-striped">
+            <thead>
+            <tr id="time-head">
+                <th></th></tr>
+            <tr id="time-d">
+                <th></th>
+            </tr>
+            </thead>
+            <tbody id="time-body">
+
+            </tbody>
+        </table>
+        <button type="submit" name="save" class="btn btn-success">Сохранить</button>
+</form>
+</div>
+
+<script>
+    var days = ["Пн", "Вт", "Ср", "Чт", "Пт", "Cб", "Вс"];
+    var times = ["8:00", "9:00","10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00",
+                "19:00", "20:00", "21:00", "22:00", "23:00"];
+    var free = {{freetime|safe}};
+    console.log(free);
+    window.onload = function(){
+        for(i=0;i<days.length;i++) {
+            $("#time-head").append("<th>"+days[i]+"</th>");
+            $("#time-d").append("<th><div class=\"range\">\n" +
+                "  <input type=\"range\" class=\"form-range\" min=\"30\" max=\"240\" step=\"15\" " +
+                "oninput=\"this.nextElementSibling.value = this.value+ ' мин'\"" +
+                "value='60' name='dur_"+i+"' />\n" +
+                "" +
+                "<output>60 мин</output></div></th>");
+        }
+        for(j=0;j<times.length;j++){
+            for(n=0;n<4;n++) {
+                if(n === 0){
+                    var el = "<tr><td rowspan='4'>" + times[j] + "</td>";}
+                else{
+                    var el = "<tr>"
+                }
+                for (i = 0; i < days.length; i++) {
+                    var nn = 4*j+n
+                    el = el + "<td><input type='checkbox' class='check' name='"+i+"_"+nn+"'"
+                    if (free[i][nn] === 1){
+                        el = el + " checked";
+                    }
+                    el = el  + ">"+"</td>";
+                }
+                el += "</tr>";
+                $("#time-body").append(el);
+            }
+
+
+        }
+    }
+    new Selectables({
+        elements: 'td',
+        zone: 'tr'
+    });
+</script>
+{% endblock %}

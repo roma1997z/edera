@@ -10,16 +10,42 @@ from django.shortcuts import get_object_or_404
 from django.forms.models import model_to_dict
 
 from lms.models import TeacherTime, TeacherDesc, InterestKey, Interest, InterestUser
-from lms.models import MatchUser, Lesson
+from lms.models import MatchUser, Lesson, LessonBook
 
 from lms import tools
 import portion as P
 import math
+import numpy as np
 import datetime
+
+
+class ChooseType(LoginRequiredMixin, TemplateView):
+    template_name = 'lms/choose_type.html'
+    login_url = '/lk/login/'
+    keys = ['typ', 'subject', 'grade']
+
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+        context["interests"] = tools.get_interest_json(self.keys)
+
+        return render(request, self.template_name, context)
+
+    def post(self, request, *args, **kwargs):
+        interests = request.POST.getlist("interest")
+        tools.set_interest(interests, request.user)
+
+        short = InterestUser.objects.filter(user_id=request.user, interest__key__key='typ', interest__symbol='short')
+        if len(short) == 0:
+            return redirect("lms:teacher_list")
+        else:
+            return redirect("lms:choose_time")
+
+
 
 class TeacherList(LoginRequiredMixin, TemplateView):
     template_name = 'lms/teacher_list.html'
     login_url = '/lk/login/'
+    keys = ['exam', 'subject', 'grade']
 
     def teacher_info(self, teacher):
         info = TeacherDesc.objects.filter(teacher=teacher).values_list("key__key","key__name", "text")
@@ -48,7 +74,7 @@ class TeacherList(LoginRequiredMixin, TemplateView):
         if tools.can_edit_teacher_profile(request.user):
             context["moderator"] = True
         # for interest filtering
-        context["interests"] = tools.get_interest_json()
+        context["interests"] = tools.get_interest_json(self.keys)
 
         # teacher list
         """
@@ -93,6 +119,60 @@ class TeacherList(LoginRequiredMixin, TemplateView):
             # interests = request.POST["filter"]
 
         return HttpResponseRedirect(reverse("lms:teacher_list"))
+
+
+class ChooseTime2(LoginRequiredMixin, TemplateView):
+    template_name = 'lms/choose_time2.html'
+    login_url = '/lk/login/'
+
+    splits = 4
+    step = int(60 / splits)
+    start_hour = 8
+
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+
+        dim = (24 - self.start_hour) * self.splits
+        m = np.zeros((7, dim))
+        for day in range(7):
+            time = P.empty()
+            tt = TeacherTime.objects.filter(teacher=request.user, day=day)
+            for t in tt:
+                time = time|P.closed(tools.to_min(t.start_time), tools.to_min(t.end_time))
+            print(time)
+            if time != P.empty():
+                for t in range(dim):
+                    if P.closed(t*self.step+self.start_hour*60, (t+1)*self.step+self.start_hour*60) in time:
+                        m[day, t] = 1
+        print(m.shape)
+        context["freetime"] = m.tolist()
+
+        return render(request, self.template_name, context)
+
+    def post(self, request, *args, **kwargs):
+        step = self.step
+        start_hour = self.start_hour
+
+        TeacherTime.objects.filter(teacher=request.user).delete()
+        for day in range(7):
+            times = P.empty()
+            for time in range((24-self.start_hour)*self.step):
+                if request.POST.get("{}_{}".format(day, time), False):
+                    times = times|P.closed(time, time+1)
+
+            if times!=P.empty():
+                for time in list(times):
+                    print(time.lower, time.upper)
+                    start_time = tools.to_time(time.lower, step, duration=start_hour*60)
+                    end_time = tools.to_time(time.upper, step, duration=start_hour*60)
+                    print(start_time, end_time)
+                    tt = TeacherTime(teacher=request.user, day=day, start_time = start_time, end_time = end_time)
+                    tt.save()
+                #duration = request.POST["day_{}".format(day)]
+                #LessonBook(day=day, duration=duration, user_id=request.user, )
+
+
+        return redirect(reverse('lms:choose_time'))
 
 
 class ChooseTime(LoginRequiredMixin, TemplateView):

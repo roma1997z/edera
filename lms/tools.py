@@ -5,10 +5,14 @@ from lms.models import InterestKey, Interest, InterestUser, TeacherTime, Lesson
 import datetime
 import portion as P
 
-def get_interest_json():
+def get_interest_json(keys=None):
     # for interest filtering
     interests = []
-    interest_key = InterestKey.objects.filter(active=True)
+    if keys is None:
+        interest_key = InterestKey.objects.filter(active=True)
+    else:
+        interest_key = InterestKey.objects.filter(key__in=keys)
+
     for key in interest_key:
         key_interests = Interest.objects.filter(active=True, key=key).values("note_id", "name")
         interests.append({"name": key.name, "key_id": key.note_id, "options": key_interests})

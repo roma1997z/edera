@@ -1,0 +1,32 @@
+{% extends "lms/starter.html" %}
+
+{% block title %}Расскажите, что вы хотите{% endblock %}
+
+{% block content %}
+<form method="POST" id="ffilter">
+    {% csrf_token %}
+    <div class="container">
+        <div class="row">
+            {% for key in interests %}
+            <div class="col-xs-4 mx-1 my-2">
+                <strong class="mx-2">{{key.name}}</strong>
+                <br>
+
+                <div class="dropdown bootstrap-select">
+                    <select name="interest" class="selectpicker">
+                        {% for interest in key.options %}
+                        <option id="interest-{{interest.note_id}}" value="{{interest.note_id}}">{{interest.name}}</option>
+                        {% endfor %}
+                    </select>
+                 </div>
+
+            </div>
+            {% endfor %}
+
+        </div>
+
+    <button type="submit" class="btn btn-lg btn-success" name="filter" value="1">
+        Дальше</button>
+</div>
+</form>
+{% endblock %}

@@ -13,5 +13,7 @@ urlpatterns = [
     path('profile/time/<int:id>/', views_teacher.AddTime.as_view(), name='teacher_time'),
     path('lesson/', views_student.LessonList.as_view(), name='lesson_list'),
     path('choose/<int:id>/', views_student.ChooseTime.as_view(), name='choose_time'),
+    path('choose/', views_student.ChooseTime2.as_view(), name='choose_time'),
+    path('choose/type/', views_student.ChooseType.as_view(), name='choose_type'),
     path('', views_student.TeacherList.as_view(), name='teacher_list'),
 ]

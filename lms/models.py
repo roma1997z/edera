@@ -37,6 +37,7 @@ class Interest(models.Model):
     note_id = models.AutoField(primary_key=True)
 
     key = models.ForeignKey(InterestKey, on_delete=models.CASCADE) #grade, exam
+    symbol = models.CharField(max_length=16, null=True, blank=True)
     name = models.CharField(max_length=64) #options
     desc = models.TextField(blank=True, null=True) #help if needed
 
@@ -76,6 +77,16 @@ class TeacherTime(models.Model):
     day = models.IntegerField()
     start_time = models.TimeField()
     end_time = models.TimeField()
+
+
+class LessonBook(models.Model):
+    note_id = models.AutoField(primary_key=True)
+
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    day = models.IntegerField() #0-7
+    duration = models.IntegerField() #in mins
+
+    date = models.DateTimeField(default=timezone.now)
 
 
 class Lesson(models.Model):

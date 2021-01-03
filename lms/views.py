@@ -31,7 +31,7 @@ def signup(request):
             pr.save()
 
             login(request, user)
-            return redirect('lms:teacher_list')
+            return redirect('lms:choose_type')
     else:
         form = UserCreationForm()
     return render(request, 'signup.html', {'form': form})
