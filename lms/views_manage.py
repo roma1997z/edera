@@ -29,7 +29,7 @@ def lesson_dict(el):
 
 class AddUser(LoginRequiredMixin, TemplateView):
     template_name = 'lms/user_manage.html'
-    login_url = 'login/'
+    login_url = '/lk/login/'
 
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
