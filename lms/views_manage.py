@@ -44,14 +44,17 @@ class AddUser(LoginRequiredMixin, TemplateView):
         chats = chats.json()['result']# json.loads(chats)['result']
         tz = pytz.timezone("Europe/Moscow")
         for el in chats:
-            if "message" in el:
-                data = el['message']
-                chat_id=data['chat']['id']
+            try:
+                if "message" in el:
+                    data = el['message']
+                    chat_id=data['chat']['id']
 
-                if chat_id not in chat_ids_in_use:
-                    text = data['text']
-                    date = tz.localize(datetime.datetime.fromtimestamp(data['date'])).strftime('%Y-%m-%d %H:%M')
-                    chat_ids.append({"chat_id":chat_id, "text":text, "date":date})
+                    if chat_id not in chat_ids_in_use:
+                        text = data['text']
+                        date = tz.localize(datetime.datetime.fromtimestamp(data['date'])).strftime('%Y-%m-%d %H:%M')
+                        chat_ids.append({"chat_id":chat_id, "text":text, "date":date})
+            except:
+                pass
         context["chats"] = chat_ids
         context["today"] = timezone.now().strftime("%Y-%m-%d")
         print(context)
