@@ -1,0 +1,74 @@
+{% extends "lms/starter.html" %}
+
+{% load static %}
+{% block title %}Выбор дней{% endblock %}
+
+{% block content %}
+<style>
+    .check{
+        zoom:2;
+    }
+</style>
+<div class="container">
+    <form method="post">
+        {% csrf_token %}
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th colspan="2">Номер урока и длительность</th>
+                <th colspan="7">В какие дни должно пройти занятие</th>
+            </tr>
+            <tr id="time-head">
+                <th>Урок</th>
+                <th>Длительность</th>
+            </tr>
+            </thead>
+            <tbody id="lessons">
+            <tr id="example-tr">
+                <td>1</td>
+                <td><div class="range">
+                    <input type="range" class="form-range" min="30" max="240" step="15"
+                    oninput="this.nextElementSibling.value = this.value+ ' мин'"
+                    value='60' name="dur_0">
+                    <output>60 мин</output></div></td>
+                {% for day in days %}
+                <td><input type="checkbox" class="check" name="l-0-{{day}}"></td>
+                {% endfor %}
+            </tr>
+            </tbody>
+        </table>
+        <button type="button" class="btn btn-secondary" onclick="add_lesson()">Еще урок</button>
+        <button type="submit" class="btn btn-success">Готово</button>
+    </form>
+</div>
+
+<script>
+    var les_num = 0;
+    function add_lesson(){
+        les_num += 1;
+        var el = $("#example-tr").clone();
+        el.prop("id", "example-tr-"+les_num);
+        cs = el.children();
+        cs.first().text(les_num+1);
+        cs.eq(1).children().first().attr("name", "dur_"+les_num);
+        for(i=2;i<9;i++){
+            var inp = cs.eq(i).children().first();
+            day=i-2;
+            console.log(inp)
+            inp.attr("name", "l-"+les_num+"-"+day);
+            inp.prop("checked", false);
+        }
+        el.appendTo("#lessons");
+
+        console.log(les_num);
+    }
+</script>
+<script>
+    var days = ["Пн", "Вт", "Ср", "Чт", "Пт", "Cб", "Вс"];
+    window.onload = function() {
+        for (i = 0; i < days.length; i++) {
+             $("#time-head").append("<th>" + days[i] + "</th>");
+         }
+    }
+</script>
+{% endblock %}

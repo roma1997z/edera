@@ -70,6 +70,33 @@ class MatchUser(models.Model):
     active = models.BooleanField(default=True, blank=True)
 
 
+# Учитель, ученик, чат
+class UserTeacher(models.Model):
+    note_id = models.AutoField(primary_key=True)
+
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name='conn_user_id')
+    teacher = models.ForeignKey(User, on_delete=models.CASCADE, related_name='conn_teacher')
+    chat_id = models.IntegerField(null=True, blank=True)
+
+    date = models.DateTimeField(default=timezone.now, blank=True, null=True)
+    active = models.BooleanField(default=True, blank=True)
+
+    def __str__(self):
+        return self.user_id.username + "(" + self.teacher.username+ ")"
+
+
+# Запланированные уроки с учеником
+class Lesson(models.Model):
+    note_id = models.AutoField(primary_key=True)
+
+    conn = models.ForeignKey(UserTeacher, on_delete=models.CASCADE, null=True)
+    date = models.DateTimeField(default=timezone.now)
+    duration = models.IntegerField(default=120) #in minutes
+    notification = models.BooleanField(default=False)
+
+    active = models.IntegerField(default=1) #0 - stopped, 1 - accepted, 2 - waiting for response
+
+
 class TeacherTime(models.Model):
     note_id = models.AutoField(primary_key=True)
 
@@ -83,23 +110,20 @@ class LessonBook(models.Model):
     note_id = models.AutoField(primary_key=True)
 
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    day = models.IntegerField() #0-7
-    duration = models.IntegerField() #in mins
+    duration = models.IntegerField(default=0)
 
-    date = models.DateTimeField(default=timezone.now)
+    day_0 = models.BooleanField(default=False, blank=True) #0-7
+    day_1 = models.BooleanField(default=False, blank=True)
+    day_2 = models.BooleanField(default=False, blank=True)
+    day_3 = models.BooleanField(default=False, blank=True)
+    day_4 = models.BooleanField(default=False, blank=True)
+    day_5 = models.BooleanField(default=False, blank=True)
+    day_6 = models.BooleanField(default=False, blank=True)
+    day_7 = models.BooleanField(default=False, blank=True)
 
+    date = models.DateTimeField(default=timezone.now) # when ordered
+    active = models.IntegerField(default=1)
 
-class Lesson(models.Model):
-    note_id = models.AutoField(primary_key=True)
-
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name='lesson_user_id')
-    teacher = models.ForeignKey(User, on_delete=models.CASCADE, related_name='lesson_teacher')
-
-    day = models.IntegerField()
-    start_time = models.TimeField()
-    end_time = models.TimeField()
-
-    active = models.IntegerField(default=2) #0 - stopped, 1 - accepted, 2 - waiting for response
 
 
 class TeacherKey(models.Model):

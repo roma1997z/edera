@@ -1,0 +1,14 @@
+{% extends "lms/starter.html" %}
+
+{% block title %}Отправка сообщения боты{% endblock %}
+
+{% block content %}
+<form method="post">
+    <select name="chat_id">
+{% for el in conns %}
+    <option value="{{el.chat_id}}">{{el.user_id.username}}-{{el.teacher.username}}</option>
+{% endfor %}
+    </select>
+    <button type="submit" class="btn btn-secondary">Отправить</button>
+</form>
+{% endblock %}

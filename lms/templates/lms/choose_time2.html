@@ -24,9 +24,10 @@
             <thead>
             <tr id="time-head">
                 <th></th></tr>
+            <!--
             <tr id="time-d">
                 <th></th>
-            </tr>
+            </tr>-->
             </thead>
             <tbody id="time-body">
 
@@ -45,12 +46,13 @@
     window.onload = function(){
         for(i=0;i<days.length;i++) {
             $("#time-head").append("<th>"+days[i]+"</th>");
+            /*
             $("#time-d").append("<th><div class=\"range\">\n" +
                 "  <input type=\"range\" class=\"form-range\" min=\"30\" max=\"240\" step=\"15\" " +
                 "oninput=\"this.nextElementSibling.value = this.value+ ' мин'\"" +
                 "value='60' name='dur_"+i+"' />\n" +
                 "" +
-                "<output>60 мин</output></div></th>");
+                "<output>60 мин</output></div></th>");*/
         }
         for(j=0;j<times.length;j++){
             for(n=0;n<4;n++) {

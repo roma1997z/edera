@@ -171,8 +171,21 @@ class ChooseTime2(LoginRequiredMixin, TemplateView):
                 #duration = request.POST["day_{}".format(day)]
                 #LessonBook(day=day, duration=duration, user_id=request.user, )
 
+        return redirect(reverse('lms:choose_day'))
 
-        return redirect(reverse('lms:choose_time'))
+
+class ChooseDay(LoginRequiredMixin, TemplateView):
+    template_name = 'lms/choose_day.html'
+    login_url = '/lk/login/'
+
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+        context["days"] = list(range(7))
+        return render(request, self.template_name, context)
+
+    def post(self, request, *args, **kwargs):
+        print(request.POST)
+        return redirect(reverse("lms:lesson_list"))
 
 
 class ChooseTime(LoginRequiredMixin, TemplateView):

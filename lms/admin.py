@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import Profile, TeacherKey, TeacherDesc, TeacherTime, InterestKey, Interest, InterestUser
-from .models import MatchUser, Lesson
+from .models import MatchUser, Lesson, UserTeacher
 
 
 class ProfileAdmin(admin.ModelAdmin):
@@ -8,8 +8,11 @@ class ProfileAdmin(admin.ModelAdmin):
 
 
 class LessonAdmin(admin.ModelAdmin):
-    list_display = ('user_id', 'teacher', 'day', 'start_time', 'end_time')
+    list_display = ('conn', 'date', 'duration', 'notification')
 
+class UserTeacherAdmin(admin.ModelAdmin):
+    list_display = ('user_id', 'teacher', 'active')
+    list_filter = ('teacher', )
 
 class MatchUserAdmin(admin.ModelAdmin):
     list_display = ('user_id', 'teacher', 'like', 'date')
@@ -42,3 +45,4 @@ admin.site.register(Interest, InterestAdmin)
 admin.site.register(InterestUser, InterestUserAdmin)
 admin.site.register(MatchUser, MatchUserAdmin)
 admin.site.register(Lesson, LessonAdmin)
+admin.site.register(UserTeacher, UserTeacherAdmin)
