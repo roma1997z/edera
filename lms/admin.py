@@ -8,11 +8,13 @@ class ProfileAdmin(admin.ModelAdmin):
 
 
 class LessonAdmin(admin.ModelAdmin):
-    list_display = ('conn', 'date', 'duration', 'notification')
+    list_display = ('conn', 'name', 'date', 'duration', 'notification')
+
 
 class UserTeacherAdmin(admin.ModelAdmin):
     list_display = ('user_id', 'teacher', 'active')
     list_filter = ('teacher', )
+
 
 class MatchUserAdmin(admin.ModelAdmin):
     list_display = ('user_id', 'teacher', 'like', 'date')

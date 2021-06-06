@@ -82,7 +82,7 @@ class UserTeacher(models.Model):
     active = models.BooleanField(default=True, blank=True)
 
     def __str__(self):
-        return self.user_id.username + "(" + self.teacher.username+ ")"
+        return self.user_id.first_name + " (" + self.teacher.first_name+ ")"
 
 
 # Запланированные уроки с учеником
@@ -92,6 +92,7 @@ class Lesson(models.Model):
     conn = models.ForeignKey(UserTeacher, on_delete=models.CASCADE, null=True)
     date = models.DateTimeField(default=timezone.now)
     duration = models.IntegerField(default=120) #in minutes
+    name = models.CharField(max_length=64, default="English Language")
     notification = models.BooleanField(default=False)
 
     active = models.IntegerField(default=1) #0 - stopped, 1 - accepted, 2 - waiting for response

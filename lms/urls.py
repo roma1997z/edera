@@ -1,6 +1,6 @@
 from django.urls import path
 
-from . import views, views_student, views_teacher, views_bot
+from . import views, views_student, views_teacher, views_bot, views_manage
 
 app_name = 'lms'
 urlpatterns = [
@@ -18,4 +18,5 @@ urlpatterns = [
     path('choose/day/', views_student.ChooseDay.as_view(), name='choose_day'),
     path('', views_student.TeacherList.as_view(), name='teacher_list'),
     path('bot/msg/', views_bot.send_msg, name='bot_send_msg'),
+    path('manage/', views_manage.AddUser.as_view(), name='manage'),
 ]

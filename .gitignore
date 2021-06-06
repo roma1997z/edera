@@ -1,7 +1,12 @@
 db.sqlite3
 *.sqlite3
 /tapartners
-/static
+/static/admin
+/static/css
+/static/img
+/static/js
+/static/landpage
+/static/node_modules
 /media
 /*/__pycache__
 /*/migrations

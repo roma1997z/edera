@@ -1,0 +1,19 @@
+.element-card{
+    border-radius:5px;
+    border-width: 2px;
+    border-style: solid;
+    border-color:#e3e3e3;
+    box-shadow: 1px 1px 1px 1px #e3e3e3;
+    padding: 5px 5px 5px 5px;
+    margin-top: 10px;
+    font-size:18px;
+    color: #6f6f6f;
+    font-weight: 600;
+    cursor: pointer;
+}
+.element-card:hover{
+    background-color: #ebf4ff;
+    transition: 0.2s;
+}
+
+.selected{background-color: #ebf4ff;}

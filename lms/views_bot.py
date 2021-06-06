@@ -34,17 +34,16 @@ def send_msg(request):
 
         # admin send
         text = "Начата рассылка сообщений"
-        text += "\n"
-        text += "\n".join(str(el.conn)+" " + format_text(el.date) for el in lessons)
-        bot.send_message(chat_id=admin_chat_id,
-                         text=text)
 
         for lesson in lessons:
             try:
                 chat_id = lesson.conn.chat_id
-                text = format_text(lesson.date)
+                text = format_text(lesson.date, lesson.duration, lesson.conn.user_id.first_name,
+                                   lesson.name, lesson.conn.teacher.first_name)
                 bot.send_message(chat_id=chat_id,
                                  text=text)
+                bot.send_message(chat_id=admin_chat_id,
+                                 text=str(lesson.conn)+"\n\n"+text)
                 lesson.notification = True
                 lesson.save()
             except Exception as e:

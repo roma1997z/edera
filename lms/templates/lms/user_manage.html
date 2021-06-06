@@ -1,0 +1,22 @@
+{% extends "lms/starter.html" %}
+{% load static %}
+
+{% block title %}Отправка сообщения боты{% endblock %}
+
+{% block content %}
+{% csrf_token %}
+<div id="main-box"></div>
+<script>
+    var token = $('input[name=csrfmiddlewaretoken]').val();
+    var users = {{users|safe}};
+    var pairs = {{pairs|safe}};
+    var chats = {{chats|safe}};
+    var today = "{{today}}";
+</script>
+<script src = "{% static 'lms/user_manage.js' %}"></script>
+<script>
+    ReactDOM.render(React.createElement(AddUser, {token:token, users:users, pairs:pairs, chats:chats,
+        today:today}),
+    document.getElementById('main-box'));
+</script>
+{% endblock %}

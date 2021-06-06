@@ -1,0 +1,1 @@
+npx babel --watch lms/src --out-dir lms --presets react-app/prod
