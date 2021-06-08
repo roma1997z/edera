@@ -94,6 +94,7 @@ class Lesson(models.Model):
     duration = models.IntegerField(default=120) #in minutes
     name = models.CharField(max_length=64, default="English Language")
     notification = models.BooleanField(default=False)
+    repeat = models.BooleanField(default=False)
 
     active = models.IntegerField(default=1) #0 - stopped, 1 - accepted, 2 - waiting for response
 

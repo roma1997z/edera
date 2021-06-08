@@ -17,3 +17,5 @@
 }
 
 .selected{background-color: #ebf4ff;}
+.click{cursor: pointer}
+.click:hover{background-color: #ebf4ff;}

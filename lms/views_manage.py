@@ -24,12 +24,14 @@ def lesson_dict(el):
     end_time = start_time + datetime.timedelta(minutes=el.duration)
     start_fmt = "%A, (%d %B) %H:%M "
     end_fmt = "%H:%M"
-    return {"id":el.note_id, "start":start_time.astimezone(tz).strftime(start_fmt), "end":end_time.astimezone(tz).strftime(end_fmt),
-            "notification":el.notification, "name":el.name}
+    return {"id":el.note_id, "start":start_time.astimezone(tz).strftime(start_fmt),
+            "end":end_time.astimezone(tz).strftime(end_fmt),
+            "notification":el.notification, "name":el.name,
+            "repeat":el.repeat, "teacher":el.conn.teacher.first_name}
 
 class AddUser(LoginRequiredMixin, TemplateView):
     template_name = 'lms/user_manage.html'
-    login_url = '/lk/login/'
+    login_url = '/login/'
 
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
@@ -98,10 +100,19 @@ class AddUser(LoginRequiredMixin, TemplateView):
             date = str(request.POST["date"]) + " " + request.POST["time"]
             date = datetime.datetime.strptime(date, "%Y-%m-%d %H:%M")#.replace(tzinfo=tz)
             print(date)
-            lesson = Lesson(conn=pair, date=date, duration=int(request.POST["duration"]), name=request.POST["name"])
+            lesson = Lesson(conn=pair, date=date, duration=int(request.POST["duration"]),
+                            name=request.POST["name"], repeat=request.POST["repeat"])
             lesson.save()
             lessons = [lesson_dict(el) for el in Lesson.objects.filter(conn=pair, date__gt=timezone.now()).order_by("date")]
             return JsonResponse({"info": lessons}, safe=True)
+
+        elif "cancel_lesson" in request.POST:
+            lesson = Lesson.objects.get(note_id=request.POST["cancel_lesson"])
+            pair = lesson.conn
+            lesson.delete()
+            lessons = [lesson_dict(el) for el in
+                       Lesson.objects.filter(conn=pair, date__gt=timezone.now()).order_by("date")]
+            return JsonResponse({"info":lessons})
 
         elif "pair_id_info" in request.POST:
             pair = UserTeacher.objects.get(note_id=request.POST["pair_id_info"])
@@ -111,15 +122,7 @@ class AddUser(LoginRequiredMixin, TemplateView):
 
 class AddConnection(LoginRequiredMixin, TemplateView):
     template_name = 'lms/add_user.html'
-    login_url = 'login/'
-
-    def get(self, request, *args, **kwargs):
-        context = self.get_context_data(**kwargs)
-
-
-class AddLesson(LoginRequiredMixin, TemplateView):
-    template_name = 'lms/add_user.html'
-    login_url = 'login/'
+    login_url = '/login/'
 
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)

@@ -85,6 +85,19 @@ class AddUser extends React.Component{
         })
     }
 
+    cancel_lesson(lesson_id){
+        var confirm = prompt("Для подтверждения введите: yes", "no")
+        if(confirm=== "yes"){
+            var formData = new FormData(document.getElementById("add_lesson"))
+            formData.append("csrfmiddlewaretoken", this.props.token);
+            formData.append("cancel_lesson", lesson_id);
+            fetch("", {method: "POST", body: formData}).then(response => response.json()).then((resp) => {
+                    console.log(resp);
+                    this.setState({add_lesson:{pair_id:this.state.add_lesson.pair_id, info:resp.info}})
+            });
+        }
+    }
+
     render(){
     return (
         <div className="container">
@@ -117,14 +130,33 @@ class AddUser extends React.Component{
                         <div className="col-md-4 col-sm-6 col-12 mb-3">
                             <input name="name" className="form-control form-control-lg mx-1" defaultValue="Mathematics"/>
                         </div>
-                        <div className="col-md-4 col-sm-6 col-12 mb-3">
+                        <div className="col-md-4 col-sm-6 col-6 mb-3">
+                            <select name="repeat" className="form-control form-control-lg mx-1" defaultValue="0">
+                                <option value="0">Одноразовый</option><option value="1">Повторяющийся</option></select>
+                            </div>
+                        <div className="col-md-4 col-sm-6 col-6 mb-3">
                     <button type="button" className="btn btn-lg btn-success mx-1"
                             onClick={()=>this.add_lesson()}>Добавить урок</button></div>
-                        </div>
+                    </div>
 
                     <div>
+                        <table className="table table-striped">
+                            <thead>
+                            <tr><th>Текст</th><th>Повтор</th><th>Уведомление<br/> отправлено</th><th>Удалить</th></tr>
+                            </thead>
+                            <tbody>
+                            {this.state.add_lesson.info.map((el, index)=>
+                            <tr><td>{el.start} - {el.end} {el.name}</td>
+                                <td>{el.repeat ? <span>&#10003;</span> : ""}</td>
+                                <td>{el.notification ? <span>&#10003;</span> :""}</td>
+                                <td className="click" onClick={()=>this.cancel_lesson(el.id)}><strong className="text-danger">Отменить</strong></td>
+                            </tr>
+                            )}
+                            </tbody>
+                        </table>
+                        <strong>Текст для копирования</strong>
                         {this.state.add_lesson.info.map((el, index)=>
-                            <p>{el.start} - {el.end} {el.name} {el.notificaton ? <span>&#10003;</span> :""}</p>)}
+                            <p>{el.start} - {el.end} {el.name} ({el.teacher}) </p>)}
                     </div>
                 </form>:<p>Выберите пару ученик-учитель</p>
             }

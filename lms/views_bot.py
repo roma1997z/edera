@@ -46,6 +46,13 @@ def send_msg(request):
                                  text=str(lesson.conn)+"\n\n"+text)
                 lesson.notification = True
                 lesson.save()
+
+                if lesson.repeat:
+                    lesson.note_id = None
+                    lesson.date += datetime.timedelta(days=7)
+                    lesson.notification = False
+                    lesson.save()
+
             except Exception as e:
                 # admin error
                 text = "Ошибка "+str(e) + "\n"
