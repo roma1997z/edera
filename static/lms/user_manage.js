@@ -22,6 +22,7 @@ var AddUser = function (_React$Component) {
             add_chat: { pair: { id: 0 }, chat: { id: 0 } },
             add_lesson: { pair_id: 0, date: 0 }
         };
+        _this.times = ["8:00", "9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00"];
         console.log(_this.state.chats);
         return _this;
     }
@@ -138,7 +139,7 @@ var AddUser = function (_React$Component) {
 
             var confirm = prompt("Для подтверждения введите: yes", "no");
             if (confirm === "yes") {
-                var formData = new FormData(document.getElementById("add_lesson"));
+                var formData = new FormData();
                 formData.append("csrfmiddlewaretoken", this.props.token);
                 formData.append("cancel_lesson", lesson_id);
                 fetch("", { method: "POST", body: formData }).then(function (response) {
@@ -150,9 +151,45 @@ var AddUser = function (_React$Component) {
             }
         }
     }, {
+        key: "delete_user",
+        value: function delete_user(user_id) {
+            var _this8 = this;
+
+            var confirm = prompt("Для подтверждения введите: yes", "no");
+            if (confirm === "yes") {
+                var formData = new FormData();
+                formData.append("csrfmiddlewaretoken", this.props.token);
+                formData.append("delete_user", user_id);
+                fetch("", { method: "POST", body: formData }).then(function (response) {
+                    return response.json();
+                }).then(function (resp) {
+                    console.log(resp);
+                    _this8.setState({ users: resp.users });
+                });
+            }
+        }
+    }, {
+        key: "delete_pair",
+        value: function delete_pair(pair_id) {
+            var _this9 = this;
+
+            var confirm = prompt("Для подтверждения введите: yes", "no");
+            if (confirm === "yes") {
+                var formData = new FormData();
+                formData.append("csrfmiddlewaretoken", this.props.token);
+                formData.append("delete_pair", pair_id);
+                fetch("", { method: "POST", body: formData }).then(function (response) {
+                    return response.json();
+                }).then(function (resp) {
+                    console.log(resp);
+                    _this9.setState({ pairs: resp.pairs, add_lesson: { pair_id: 0, date: 0 } });
+                });
+            }
+        }
+    }, {
         key: "render",
         value: function render() {
-            var _this8 = this;
+            var _this10 = this;
 
             return React.createElement(
                 "div",
@@ -171,9 +208,9 @@ var AddUser = function (_React$Component) {
                             { className: "col-md-3" },
                             React.createElement(
                                 "div",
-                                { className: pair.pair_id === _this8.state.add_lesson.pair_id ? "element-card selected" : "element-card",
+                                { className: pair.pair_id === _this10.state.add_lesson.pair_id ? "element-card selected" : "element-card",
                                     onClick: function onClick() {
-                                        return _this8.pair_id_info(pair.pair_id);
+                                        return _this10.pair_id_info(pair.pair_id);
                                     } },
                                 pair.name,
                                 pair.chat_id ? "" : React.createElement(
@@ -200,7 +237,17 @@ var AddUser = function (_React$Component) {
                         React.createElement(
                             "div",
                             { className: "col-md-4 col-sm-3 col-6 mb-3" },
-                            React.createElement("input", { className: "form-control form-control-lg mx-1", name: "time", defaultValue: "19:00" })
+                            React.createElement(
+                                "select",
+                                { className: "form-control form-control-lg mx-1", name: "time", defaultValue: "19:00" },
+                                this.times.map(function (value, index) {
+                                    return React.createElement(
+                                        "option",
+                                        { value: value },
+                                        value
+                                    );
+                                })
+                            )
                         ),
                         React.createElement(
                             "div",
@@ -265,7 +312,7 @@ var AddUser = function (_React$Component) {
                                 "button",
                                 { type: "button", className: "btn btn-lg btn-success mx-1",
                                     onClick: function onClick() {
-                                        return _this8.add_lesson();
+                                        return _this10.add_lesson();
                                     } },
                                 "\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C \u0443\u0440\u043E\u043A"
                             )
@@ -344,7 +391,7 @@ var AddUser = function (_React$Component) {
                                         React.createElement(
                                             "td",
                                             { className: "click", onClick: function onClick() {
-                                                    return _this8.cancel_lesson(el.id);
+                                                    return _this10.cancel_lesson(el.id);
                                                 } },
                                             React.createElement(
                                                 "strong",
@@ -356,6 +403,14 @@ var AddUser = function (_React$Component) {
                                 })
                             )
                         ),
+                        React.createElement(
+                            "button",
+                            { type: "button", onClick: function onClick() {
+                                    return _this10.delete_pair(_this10.state.add_lesson.pair_id);
+                                }, className: "btn btn-outline-danger" },
+                            "\u0420\u0430\u0441\u0444\u043E\u0440\u043C\u0438\u0440\u043E\u0432\u0430\u0442\u044C \u043F\u0430\u0440\u0443"
+                        ),
+                        React.createElement("br", null),
                         React.createElement(
                             "strong",
                             null,
@@ -408,14 +463,21 @@ var AddUser = function (_React$Component) {
                             null,
                             "\u0423\u0447\u0435\u043D\u0438\u043A\u0438"
                         ),
+                        this.state.add_pair.student ? React.createElement(
+                            "button",
+                            { type: "button", onClick: function onClick() {
+                                    return _this10.delete_user(_this10.state.add_pair.student);
+                                }, className: "btn btn-outline-danger" },
+                            "\u0423\u0434\u0430\u043B\u0438\u0442\u044C \u0443\u0447\u0435\u043D\u0438\u043A\u0430"
+                        ) : "",
                         this.state.users.filter(function (user) {
                             return user.role === "student";
                         }).map(function (user, index) {
                             return React.createElement(
                                 "div",
-                                { className: user.user_id === _this8.state.add_pair.student ? "element-card selected" : "element-card",
+                                { className: user.user_id === _this10.state.add_pair.student ? "element-card selected" : "element-card",
                                     onClick: function onClick() {
-                                        return _this8.setState({ add_pair: { student: user.user_id, teacher: _this8.state.add_pair.teacher } });
+                                        return _this10.setState({ add_pair: { student: user.user_id, teacher: _this10.state.add_pair.teacher } });
                                     } },
                                 user.name
                             );
@@ -423,7 +485,7 @@ var AddUser = function (_React$Component) {
                         React.createElement(
                             "div",
                             { className: "element-card", onClick: function onClick() {
-                                    return _this8.add_user("student");
+                                    return _this10.add_user("student");
                                 } },
                             React.createElement(
                                 "span",
@@ -440,14 +502,21 @@ var AddUser = function (_React$Component) {
                             null,
                             "\u0423\u0447\u0438\u0442\u0435\u043B\u044F"
                         ),
+                        this.state.add_pair.teacher ? React.createElement(
+                            "button",
+                            { type: "button", onClick: function onClick() {
+                                    return _this10.delete_user(_this10.state.add_pair.teacher);
+                                }, className: "btn btn-outline-danger" },
+                            "\u0423\u0434\u0430\u043B\u0438\u0442\u044C \u0443\u0447\u0438\u0442\u0435\u043B\u044F"
+                        ) : "",
                         this.state.users.filter(function (user) {
                             return user.role === "teacher";
                         }).map(function (user, index) {
                             return React.createElement(
                                 "div",
-                                { className: user.user_id === _this8.state.add_pair.teacher ? "element-card selected" : "element-card",
+                                { className: user.user_id === _this10.state.add_pair.teacher ? "element-card selected" : "element-card",
                                     onClick: function onClick() {
-                                        return _this8.setState({ add_pair: { student: _this8.state.add_pair.student, teacher: user.user_id } });
+                                        return _this10.setState({ add_pair: { student: _this10.state.add_pair.student, teacher: user.user_id } });
                                     } },
                                 user.name
                             );
@@ -455,7 +524,7 @@ var AddUser = function (_React$Component) {
                         React.createElement(
                             "div",
                             { className: "element-card", onClick: function onClick() {
-                                    return _this8.add_user("teacher");
+                                    return _this10.add_user("teacher");
                                 } },
                             React.createElement(
                                 "span",
@@ -476,7 +545,7 @@ var AddUser = function (_React$Component) {
                     React.createElement(
                         "button",
                         { type: "button", className: "btn btn-success", onClick: function onClick() {
-                                return _this8.add_pair();
+                                return _this10.add_pair();
                             },
                             disabled: !this.state.add_pair.student || !this.state.add_pair.teacher },
                         "\u0421\u043E\u0437\u0434\u0430\u0442\u044C \u043F\u0430\u0440\u0443 \u0443\u0447\u0435\u043D\u0438\u043A-\u0443\u0447\u0438\u0442\u0435\u043B\u044C"
@@ -500,9 +569,9 @@ var AddUser = function (_React$Component) {
                         }).map(function (pair, index) {
                             return React.createElement(
                                 "div",
-                                { className: pair.pair_id === _this8.state.add_chat.pair.id ? "element-card selected" : "element-card",
+                                { className: pair.pair_id === _this10.state.add_chat.pair.id ? "element-card selected" : "element-card",
                                     onClick: function onClick() {
-                                        return _this8.setState({ add_chat: { pair: { id: pair.pair_id, index: index }, chat: _this8.state.add_chat.chat } });
+                                        return _this10.setState({ add_chat: { pair: { id: pair.pair_id, index: index }, chat: _this10.state.add_chat.chat } });
                                     } },
                                 pair.name
                             );
@@ -519,9 +588,9 @@ var AddUser = function (_React$Component) {
                         this.state.chats.map(function (chat, index) {
                             return React.createElement(
                                 "div",
-                                { className: chat.chat_id === _this8.state.add_chat.chat.id ? "element-card selected" : "element-card",
+                                { className: chat.chat_id === _this10.state.add_chat.chat.id ? "element-card selected" : "element-card",
                                     onClick: function onClick() {
-                                        return _this8.setState({ add_chat: { pair: _this8.state.add_chat.pair, chat: { id: chat.chat_id, index: index } } });
+                                        return _this10.setState({ add_chat: { pair: _this10.state.add_chat.pair, chat: { id: chat.chat_id, index: index } } });
                                     } },
                                 React.createElement(
                                     "span",
@@ -574,7 +643,7 @@ var AddUser = function (_React$Component) {
                 React.createElement(
                     "button",
                     { type: "button", className: "btn btn-success", onClick: function onClick() {
-                            return _this8.add_chat();
+                            return _this10.add_chat();
                         },
                         disabled: !this.state.add_chat.pair.id || !this.state.add_chat.chat.id
                     },

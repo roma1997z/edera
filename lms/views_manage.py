@@ -19,6 +19,7 @@ def user_dict(el):
 def pair_dict(el):
     return {"pair_id":el.note_id, "chat_id":0 if el.chat_id is None else el.chat_id, "name":str(el)}
 
+
 def lesson_dict(el):
     start_time = el.date
     end_time = start_time + datetime.timedelta(minutes=el.duration)
@@ -28,6 +29,7 @@ def lesson_dict(el):
             "end":end_time.astimezone(tz).strftime(end_fmt),
             "notification":el.notification, "name":el.name,
             "repeat":el.repeat, "teacher":el.conn.teacher.first_name}
+
 
 class AddUser(LoginRequiredMixin, TemplateView):
     template_name = 'lms/user_manage.html'
@@ -121,6 +123,18 @@ class AddUser(LoginRequiredMixin, TemplateView):
             old_lessons = [lesson_dict(el) for el in Lesson.objects.filter(conn=pair, date__range=(week_start, timezone.now())).order_by("date")]
 
             return JsonResponse({"info":lessons, "old_info":old_lessons}, safe=True)
+
+        elif "delete_user" in request.POST:
+            user_id = User.objects.get(id=request.POST['delete_user'])
+            user_id.profile.delete()
+            user_id.delete()
+            return JsonResponse({"users":[user_dict(el) for el in User.objects.all()]})
+
+        elif "delete_pair" in request.POST:
+            conn = UserTeacher.objects.get(note_id=request.POST["delete_pair"])
+            conn.delete()
+            return JsonResponse({"pairs":[pair_dict(el) for el in UserTeacher.objects.all()]})
+
 
 class AddConnection(LoginRequiredMixin, TemplateView):
     template_name = 'lms/add_user.html'

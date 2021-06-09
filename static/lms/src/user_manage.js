@@ -9,6 +9,8 @@ class AddUser extends React.Component{
                     add_chat:{pair:{id:0}, chat:{id:0}},
                     add_lesson:{pair_id:0, date:0}
         };
+        this.times = ["8:00", "9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00",
+            "18:00", "19:00", "20:00", "21:00", "22:00", "23:00"]
         console.log(this.state.chats);
     }
 
@@ -88,12 +90,38 @@ class AddUser extends React.Component{
     cancel_lesson(lesson_id){
         var confirm = prompt("Для подтверждения введите: yes", "no")
         if(confirm=== "yes"){
-            var formData = new FormData(document.getElementById("add_lesson"))
+            var formData = new FormData()
             formData.append("csrfmiddlewaretoken", this.props.token);
             formData.append("cancel_lesson", lesson_id);
             fetch("", {method: "POST", body: formData}).then(response => response.json()).then((resp) => {
                     console.log(resp);
                     this.setState({add_lesson:{pair_id:this.state.add_lesson.pair_id, info:resp.info, old_info: this.state.add_lesson.old_info}})
+            });
+        }
+    }
+
+    delete_user(user_id){
+        var confirm = prompt("Для подтверждения введите: yes", "no")
+        if(confirm=== "yes"){
+            var formData = new FormData()
+            formData.append("csrfmiddlewaretoken", this.props.token);
+            formData.append("delete_user", user_id);
+            fetch("", {method: "POST", body: formData}).then(response => response.json()).then((resp) => {
+                    console.log(resp);
+                    this.setState({users:resp.users});
+            });
+        }
+    }
+
+    delete_pair(pair_id){
+        var confirm = prompt("Для подтверждения введите: yes", "no")
+        if(confirm=== "yes"){
+            var formData = new FormData()
+            formData.append("csrfmiddlewaretoken", this.props.token);
+            formData.append("delete_pair", pair_id);
+            fetch("", {method: "POST", body: formData}).then(response => response.json()).then((resp) => {
+                    console.log(resp);
+                    this.setState({pairs:resp.pairs, add_lesson:{pair_id:0, date:0}});
             });
         }
     }
@@ -118,7 +146,11 @@ class AddUser extends React.Component{
                         <div className="col-md-4 col-sm-5 col-12 mb-3">
                     <input className="form-control form-control-lg mx-1" name="date" type="date" defaultValue={this.props.today}/></div>
                         <div className="col-md-4 col-sm-3 col-6 mb-3">
-                            <input className="form-control form-control-lg mx-1" name="time" defaultValue="19:00"/></div>
+                            <select className="form-control form-control-lg mx-1" name="time" defaultValue="19:00">
+                                {this.times.map((value, index)=>
+                                <option value={value}>{value}</option>)}
+                            </select>
+                        </div>
                         <div className="col-md-4 col-sm-4 col-6  mb-3">
                         <select name="duration" className="form-control form-control-lg mx-1" defaultValue="60">
                             <option value="30">30 мин</option>
@@ -154,6 +186,7 @@ class AddUser extends React.Component{
                             )}
                             </tbody>
                         </table>
+                        <button type="button" onClick={()=>this.delete_pair(this.state.add_lesson.pair_id)} className="btn btn-outline-danger">Расформировать пару</button><br/>
                         <strong>Текст для копирования</strong>
                         {this.state.add_lesson.old_info.map((el, index)=>
                             <p className="text-success">{el.start} - {el.end} {el.name} ({el.teacher}) </p>)}
@@ -167,6 +200,8 @@ class AddUser extends React.Component{
             <div className="row">
                 <div className="col-md-6">
                     <h2>Ученики</h2>
+                    {this.state.add_pair.student ? <button type="button" onClick={()=>this.delete_user(this.state.add_pair.student)} className="btn btn-outline-danger">
+                        Удалить ученика</button>:""}
                      {this.state.users.filter(function (user) {return user.role === "student"}).map((user, index)=>
                      <div className={user.user_id===this.state.add_pair.student?"element-card selected":"element-card"}
                           onClick={()=>this.setState({add_pair:{student:user.user_id, teacher:this.state.add_pair.teacher}})}>{user.name}</div>)
@@ -175,6 +210,8 @@ class AddUser extends React.Component{
                 </div>
                 <div className="col-md-6">
                     <h2>Учителя</h2>
+                    {this.state.add_pair.teacher ? <button type="button" onClick={()=>this.delete_user(this.state.add_pair.teacher)} className="btn btn-outline-danger">
+                        Удалить учителя</button>:""}
                     {this.state.users.filter(function (user) {return user.role === "teacher"}).map((user, index)=>
                      <div className={user.user_id===this.state.add_pair.teacher?"element-card selected":"element-card"}
                           onClick={()=>this.setState({add_pair:{student:this.state.add_pair.student, teacher:user.user_id}})}>{user.name}</div>)
