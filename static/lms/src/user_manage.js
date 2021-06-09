@@ -72,7 +72,7 @@ class AddUser extends React.Component{
         formData.append("pair_id_info", pair_id);
         fetch("", {method: "POST", body: formData}).then(response => response.json()).then((resp) => {
                 console.log(resp);
-                this.setState({add_lesson:{pair_id:pair_id, info:resp.info}})})
+                this.setState({add_lesson:{pair_id:pair_id, info:resp.info, old_info:resp.old_info}})})
     }
     add_lesson(){
         var formData = new FormData(document.getElementById("add_lesson"))
@@ -81,7 +81,7 @@ class AddUser extends React.Component{
         formData.append("add_lesson", 1);
         fetch("", {method: "POST", body: formData}).then(response => response.json()).then((resp) => {
                 console.log(resp);
-                this.setState({add_lesson:{pair_id:this.state.add_lesson.pair_id, info:resp.info}})
+                this.setState({add_lesson:{pair_id:this.state.add_lesson.pair_id, info:resp.info, old_info: this.state.add_lesson.old_info}})
         })
     }
 
@@ -93,7 +93,7 @@ class AddUser extends React.Component{
             formData.append("cancel_lesson", lesson_id);
             fetch("", {method: "POST", body: formData}).then(response => response.json()).then((resp) => {
                     console.log(resp);
-                    this.setState({add_lesson:{pair_id:this.state.add_lesson.pair_id, info:resp.info}})
+                    this.setState({add_lesson:{pair_id:this.state.add_lesson.pair_id, info:resp.info, old_info: this.state.add_lesson.old_info}})
             });
         }
     }
@@ -155,6 +155,8 @@ class AddUser extends React.Component{
                             </tbody>
                         </table>
                         <strong>Текст для копирования</strong>
+                        {this.state.add_lesson.old_info.map((el, index)=>
+                            <p className="text-success">{el.start} - {el.end} {el.name} ({el.teacher}) </p>)}
                         {this.state.add_lesson.info.map((el, index)=>
                             <p>{el.start} - {el.end} {el.name} ({el.teacher}) </p>)}
                     </div>

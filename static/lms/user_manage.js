@@ -112,7 +112,7 @@ var AddUser = function (_React$Component) {
                 return response.json();
             }).then(function (resp) {
                 console.log(resp);
-                _this5.setState({ add_lesson: { pair_id: pair_id, info: resp.info } });
+                _this5.setState({ add_lesson: { pair_id: pair_id, info: resp.info, old_info: resp.old_info } });
             });
         }
     }, {
@@ -128,7 +128,7 @@ var AddUser = function (_React$Component) {
                 return response.json();
             }).then(function (resp) {
                 console.log(resp);
-                _this6.setState({ add_lesson: { pair_id: _this6.state.add_lesson.pair_id, info: resp.info } });
+                _this6.setState({ add_lesson: { pair_id: _this6.state.add_lesson.pair_id, info: resp.info, old_info: _this6.state.add_lesson.old_info } });
             });
         }
     }, {
@@ -145,7 +145,7 @@ var AddUser = function (_React$Component) {
                     return response.json();
                 }).then(function (resp) {
                     console.log(resp);
-                    _this7.setState({ add_lesson: { pair_id: _this7.state.add_lesson.pair_id, info: resp.info } });
+                    _this7.setState({ add_lesson: { pair_id: _this7.state.add_lesson.pair_id, info: resp.info, old_info: _this7.state.add_lesson.old_info } });
                 });
             }
         }
@@ -361,6 +361,20 @@ var AddUser = function (_React$Component) {
                             null,
                             "\u0422\u0435\u043A\u0441\u0442 \u0434\u043B\u044F \u043A\u043E\u043F\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u044F"
                         ),
+                        this.state.add_lesson.old_info.map(function (el, index) {
+                            return React.createElement(
+                                "p",
+                                { className: "text-success" },
+                                el.start,
+                                " - ",
+                                el.end,
+                                " ",
+                                el.name,
+                                " (",
+                                el.teacher,
+                                ") "
+                            );
+                        }),
                         this.state.add_lesson.info.map(function (el, index) {
                             return React.createElement(
                                 "p",

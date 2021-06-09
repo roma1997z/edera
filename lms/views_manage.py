@@ -59,7 +59,6 @@ class AddUser(LoginRequiredMixin, TemplateView):
                 pass
         context["chats"] = chat_ids
         context["today"] = timezone.now().strftime("%Y-%m-%d")
-        print(context)
 
         return render(request, self.template_name, context)
 
@@ -117,8 +116,11 @@ class AddUser(LoginRequiredMixin, TemplateView):
         elif "pair_id_info" in request.POST:
             pair = UserTeacher.objects.get(note_id=request.POST["pair_id_info"])
             lessons = [lesson_dict(el) for el in Lesson.objects.filter(conn=pair, date__gt=timezone.now()).order_by("date")]
-            print(lessons)
-            return JsonResponse({"info":lessons}, safe=True)
+            day = datetime.datetime.today().weekday()
+            week_start = datetime.datetime.today() - datetime.timedelta(days=day)
+            old_lessons = [lesson_dict(el) for el in Lesson.objects.filter(conn=pair, date__range=(week_start, timezone.now())).order_by("date")]
+
+            return JsonResponse({"info":lessons, "old_info":old_lessons}, safe=True)
 
 class AddConnection(LoginRequiredMixin, TemplateView):
     template_name = 'lms/add_user.html'
